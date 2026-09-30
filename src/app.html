@@ -1,0 +1,870 @@
+<title>Carnet de famille</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout : une colonne mobile sur fond béton vert sombre — plaque d'en-tête rivetée, bandeau « À ne pas oublier », recherche + filtres collants, fiches en acier fumé groupées par délai, boutons en verre dépoli. */
+:root{
+  color-scheme:dark;
+  --bg:#0E1411; --bg-2:#131B17; --bg-glow:#1F4A36; --bg-warm:#5A3F1C;
+  --plate:rgba(22,31,27,.78); --plate-2:rgba(34,46,40,.72); --line:rgba(214,232,221,.11); --line-2:rgba(214,232,221,.2);
+  --ink:#E9EFEA; --ink-2:#A8B8AE; --ink-3:#72847A;
+  --green:#2F6E51; --green-hi:#93D6B1; --brass:#CFA05A; --brass-hi:#EBC98F;
+  --sante:#DC735F; --sante-bg:rgba(220,115,95,.15); --sante-ink:#F4AE9F;
+  --vehicule:#7FA8CC; --vehicule-bg:rgba(127,168,204,.15); --vehicule-ink:#BCD6EE;
+  --maison:#D8A64E; --maison-bg:rgba(216,166,78,.15); --maison-ink:#F0CD8B;
+  --activites:#57C2AA; --activites-bg:rgba(87,194,170,.15); --activites-ink:#A2E6D5;
+  --late:#FF7B66; --late-bg:rgba(255,123,102,.14); --soon:#EDB45E; --soon-bg:rgba(237,180,94,.14); --ok:#7ED3A3;
+  --f-display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r:18px;
+  --glass-bg:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.035));
+  --glass-border:rgba(255,255,255,.16);
+  --glass-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.28),0 8px 22px rgba(0,0,0,.35);
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .8  0 0 0 0 .9  0 0 0 0 .85  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.45;-webkit-tap-highlight-color:transparent;min-height:100vh;
+  background-image:var(--noise),radial-gradient(120% 60% at 0% 0%,rgba(47,110,81,.55),transparent 60%),radial-gradient(90% 50% at 100% 30%,rgba(90,63,28,.35),transparent 65%),radial-gradient(100% 60% at 50% 100%,rgba(31,74,54,.45),transparent 70%);
+  background-attachment:fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--green-hi);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding-inline:16px;padding-block:14px 130px}
+
+/* Verre */
+.glass{background:var(--glass-bg);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%)}
+.glass-green{background:linear-gradient(180deg,rgba(147,214,177,.42),rgba(47,110,81,.55) 55%,rgba(26,70,50,.7));border:1px solid rgba(170,235,200,.38);color:#F3FFF8;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(0,0,0,.3),0 10px 26px rgba(20,60,42,.55);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%)}
+.glass:active,.glass-green:active{transform:translateY(1px) scale(.99)}
+
+/* Plaque d'en-tête */
+.plate{position:relative;border-radius:22px;padding:18px 18px 16px;background:linear-gradient(160deg,rgba(40,56,48,.85),rgba(18,26,22,.9));border:1px solid var(--line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 30px rgba(0,0,0,.35)}
+.plate::before,.plate::after,.rivets::before,.rivets::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8e2dc,#6c7a72 55%,#2b332f);box-shadow:0 1px 1px rgba(0,0,0,.6)}
+.plate::before{top:10px;left:10px}.plate::after{top:10px;right:10px}
+.rivets::before{bottom:10px;left:10px}.rivets::after{bottom:10px;right:10px}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
+.top h1{font-family:var(--f-display);font-weight:900;font-size:2.35rem;letter-spacing:.01em;text-transform:uppercase;margin:0;line-height:.92;text-wrap:balance}
+.top h1 span{color:var(--green-hi)}
+.sync{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;color:var(--ink-3);margin-top:10px;font-family:var(--f-mono)}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--ink-3);display:inline-block;box-shadow:0 0 0 3px rgba(255,255,255,.04)}
+.sync.ok i{background:var(--ok);box-shadow:0 0 8px var(--ok)} .sync.warn i{background:var(--soon)}
+.icon-btn{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none;position:relative;color:var(--ink)}
+.icon-btn svg{width:21px;height:21px}
+.icon-btn .badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--late);color:#fff;font-size:.68rem;font-weight:700;display:grid;place-items:center;padding:0 4px;font-family:var(--f-body)}
+.icon-btn .pip{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+
+/* Bandeau rappels */
+.alerts{margin-top:14px;border-radius:var(--r);padding:14px 14px 6px;background:linear-gradient(180deg,rgba(207,160,90,.10),rgba(22,31,27,.8));border:1px solid rgba(207,160,90,.28)}
+.alerts h2{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:1.25rem;margin:0 0 6px;display:flex;align-items:center;gap:9px;color:var(--brass-hi)}
+.alerts h2 .count{background:var(--late);color:#fff;border-radius:999px;font-size:.74rem;padding:1px 8px;font-family:var(--f-body);letter-spacing:0}
+.alert-row{display:flex;align-items:center;gap:10px;padding:10px 0;border:0;border-top:1px solid var(--line);width:100%;background:none;text-align:left}
+.alert-row:first-of-type{border-top:0}
+.alert-row .dot{width:10px;height:10px;border-radius:3px;flex:none;transform:rotate(45deg)}
+.alert-row .t{flex:1;min-width:0}
+.alert-row .t b{display:block;font-weight:600;overflow-wrap:anywhere;line-height:1.25}
+.alert-row .t span{font-size:.84rem;color:var(--ink-2)}
+.tag{font-family:var(--f-mono);font-size:.74rem;font-weight:600;border-radius:8px;padding:4px 8px;white-space:nowrap}
+.tag.late{background:var(--late-bg);color:var(--late);border:1px solid rgba(255,123,102,.3)}
+.tag.soon{background:var(--soon-bg);color:var(--soon);border:1px solid rgba(237,180,94,.3)}
+
+/* Recherche + filtres */
+.tools{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5;margin-top:14px;padding:10px;border-radius:22px;display:grid;gap:8px;
+  background:linear-gradient(180deg,rgba(34,48,41,.78),rgba(16,23,20,.82));border:1px solid var(--line-2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 32px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%)}
+.search{position:relative}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:var(--ink-3)}
+.search input{width:100%;height:48px;border-radius:16px;padding:0 44px 0 44px;font-size:1rem;background:rgba(10,15,12,.55);border:1px solid var(--line-2);box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+.search input::placeholder{color:var(--ink-3)}
+.search .clear{position:absolute;right:7px;top:7px;width:36px;height:36px;border:0;background:none;color:var(--ink-3);font-size:1.3rem}
+.row-label{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.row-label button{border:0;background:none;color:var(--green-hi);font-family:var(--f-body);font-size:.84rem;font-weight:600;letter-spacing:0;text-transform:none;padding:4px 2px;display:inline-flex;align-items:center;gap:4px}
+.row-label button svg{width:15px;height:15px}
+.chips{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:3px 4px 5px;margin:0 -4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scroll-snap-type:x proximity;scroll-padding-inline:8px;cursor:grab;user-select:none;-webkit-user-select:none;
+  --fl:0px;--fr:0px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+.chips.more-l{--fl:26px}.chips.more-r{--fr:34px}
+.chips.dragging{cursor:grabbing;scroll-snap-type:none}
+.chips::-webkit-scrollbar{display:none}
+.chips>*{scroll-snap-align:start}
+.chip.add{color:var(--green-hi);border-style:dashed;padding-left:12px}
+.chip.add svg{width:15px;height:15px}
+.chip{flex:none;border-radius:999px;padding:7px 14px 7px 8px;font-size:.9rem;font-weight:600;display:inline-flex;align-items:center;gap:7px;color:var(--ink-2)}
+.chip.noav{padding-left:14px}
+.chip .av{width:22px;height:22px;font-size:.7rem}
+.chip[aria-pressed="true"]{color:#F3FFF8;background:linear-gradient(180deg,rgba(147,214,177,.4),rgba(47,110,81,.6));border-color:rgba(170,235,200,.45)}
+.chip.cat{padding-left:12px}
+.chip.cat .sw{width:9px;height:9px;border-radius:2px;background:var(--c);transform:rotate(45deg)}
+.chip.cat[aria-pressed="true"]{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 55%,transparent),color-mix(in srgb,var(--c) 30%,rgba(0,0,0,.4)));border-color:var(--c);color:#fff}
+.chip.cat[aria-pressed="true"] .sw{background:#fff}
+
+/* Avatars */
+.av{width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:.8rem;color:#fff;background:var(--m,#777);flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 3px rgba(0,0,0,.4)}
+.av.fam{background:linear-gradient(180deg,#4d5e55,#2a3530)}
+.av.fam svg{width:60%;height:60%}
+
+/* Liste */
+.group{margin-top:20px}
+.group h3{font-family:var(--f-mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin:0 0 9px 4px;font-weight:600;display:flex;align-items:center;gap:10px}
+.group h3::after{content:"";flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--line-2) 0 6px,transparent 6px 10px)}
+.group h3 .n{order:2;color:var(--ink-2)}
+.group.late h3{color:var(--late)}
+.list{display:grid;gap:10px}
+.card{display:grid;grid-template-columns:1fr auto;gap:10px 12px;border-radius:var(--r);padding:14px 14px 12px 16px;text-align:left;width:100%;color:var(--ink);
+  background:linear-gradient(165deg,rgba(38,52,45,.82),rgba(20,28,24,.88));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 22px rgba(0,0,0,.28)}
+.card:active{transform:scale(.99)}
+.card .main{min-width:0;display:grid;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border-radius:7px;padding:3px 8px;background:var(--cbg);color:var(--cink);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);width:max-content;max-width:100%}
+.pill svg{width:14px;height:14px}
+.card .subj{font-weight:700;font-size:1.08rem;line-height:1.22;overflow-wrap:anywhere}
+.card .who{display:flex;align-items:center;gap:7px;font-size:.9rem;color:var(--ink-2);flex-wrap:wrap}
+.card .who .av{width:22px;height:22px;font-size:.66rem}
+.card .meta{font-size:.82rem;color:var(--ink-3)}
+.card .note{font-size:.86rem;color:var(--ink-2);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.datebox{width:68px;border-radius:13px;background:linear-gradient(180deg,var(--cbg),rgba(0,0,0,.25));color:var(--cink);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);display:grid;place-items:center;align-content:center;padding:8px 4px 7px;text-align:center;align-self:start;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.datebox .d{font-family:var(--f-display);font-weight:900;font-size:2.1rem;line-height:.9}
+.datebox .m{font-family:var(--f-mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+.datebox .y{font-family:var(--f-mono);font-size:.62rem;opacity:.75}
+.datebox.none{background:rgba(255,255,255,.04);color:var(--ink-3);border-color:var(--line)}
+.rel{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px dashed var(--line-2);padding-top:9px;font-size:.84rem;color:var(--ink-2)}
+.rel b{font-weight:700;color:var(--ink)}
+.rel .late{color:var(--late)} .rel .soon{color:var(--soon)}
+.rel .bell{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-mono);font-size:.74rem;color:var(--ink-3)}
+.rel .bell svg{width:13px;height:13px}
+.ex{font-size:.62rem;letter-spacing:.08em;background:rgba(255,255,255,.08);color:var(--ink-2);border-radius:5px;padding:1px 5px}
+
+.empty{text-align:center;border-radius:var(--r);padding:28px 20px;margin-top:18px;background:var(--plate);border:1px solid var(--line)}
+.empty h2{font-family:var(--f-display);text-transform:uppercase;font-weight:800;letter-spacing:.03em;margin:0 0 6px;font-size:1.5rem}
+.empty p{color:var(--ink-2);margin:0 auto 16px;max-width:36ch}
+.empty .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.foot{margin-top:30px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.link-btn{background:none;border:0;color:var(--ink-2);font-weight:600;font-size:.9rem;padding:8px 10px;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px}
+
+/* Boutons */
+.btn{min-height:50px;border-radius:16px;padding:0 18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:var(--ink);font-size:.98rem;text-align:center}
+.btn svg{width:19px;height:19px}
+.btn.danger{color:var(--late);border-color:rgba(255,123,102,.4)}
+.btn.danger.armed{background:linear-gradient(180deg,rgba(255,123,102,.55),rgba(160,50,35,.7));color:#fff}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));height:60px;border-radius:22px;padding:0 24px 0 18px;font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:8px;z-index:10}
+.fab svg{width:24px;height:24px}
+
+/* Feuilles */
+.scrim{position:fixed;inset:0;background:rgba(4,8,6,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet{width:100%;max-width:640px;max-height:94%;border-radius:26px 26px 0 0;display:flex;flex-direction:column;animation:up .22s ease-out;
+  background:linear-gradient(180deg,rgba(30,42,36,.92),rgba(14,20,17,.96));border:1px solid var(--line-2);border-bottom:0;box-shadow:0 -10px 40px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+@media (min-width:700px){.scrim{align-items:center}.sheet{border-radius:26px;max-height:90%;border-bottom:1px solid var(--line-2)}}
+@keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--line);gap:10px}
+.sheet-head h2{font-family:var(--f-display);text-transform:uppercase;font-weight:800;letter-spacing:.03em;font-size:1.55rem;margin:0;line-height:1}
+.sheet-body>*{min-width:0}
+.sheet-body{overflow-y:auto;overflow-x:hidden;padding:16px;display:grid;gap:18px;-webkit-overflow-scrolling:touch}
+.sheet-foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:10px}
+.sheet-foot .btn{flex:1}
+.field{display:grid;gap:7px;min-width:0}
+.field>label,.field>.lab{font-family:var(--f-mono);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-2)}
+.field .hint{font-size:.82rem;color:var(--ink-3)}
+.field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;display:block;min-height:50px;border-radius:14px;border:1px solid var(--line-2);background:rgba(8,12,10,.55);padding:11px 13px;font-size:1rem;box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
+.field textarea{min-height:88px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{border-radius:14px;padding:8px 13px 8px 9px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;min-height:46px;color:var(--ink)}
+.pick button .av{width:24px;height:24px;font-size:.7rem}
+.pick button[aria-pressed="true"]{background:linear-gradient(180deg,rgba(147,214,177,.4),rgba(47,110,81,.6));border-color:rgba(170,235,200,.5)}
+.catpick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.catpick button{border-radius:15px;padding:12px;display:flex;align-items:center;gap:9px;font-weight:700;min-height:56px;text-align:left;color:var(--cink);background:linear-gradient(180deg,var(--cbg),rgba(0,0,0,.2));border:1px solid color-mix(in srgb,var(--c) 35%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.catpick button svg{width:21px;height:21px;flex:none}
+.catpick button[aria-pressed="true"]{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 70%,#fff 5%),color-mix(in srgb,var(--c) 45%,#000 30%));border-color:var(--c);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 18px color-mix(in srgb,var(--c) 35%,transparent)}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.sugg button{border:1px dashed var(--line-2);background:none;border-radius:999px;padding:5px 11px;font-size:.84rem;color:var(--ink-2)}
+.info-box{border-radius:16px;padding:13px 14px;font-size:.92rem;color:var(--ink-2);display:grid;gap:10px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.info-box b{color:var(--ink)}
+.row-actions{display:flex;flex-wrap:wrap;gap:8px}
+.row-actions .btn{min-height:46px;font-size:.92rem;padding:0 14px}
+
+/* Membres */
+.mem{display:flex;align-items:center;gap:10px;border-radius:15px;padding:8px 10px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.mem input{flex:1;min-width:0;width:0;border:0;background:none;font-weight:600;font-size:1.02rem;padding:8px 4px}
+.mem .del{border:0;background:none;color:var(--ink-3);width:38px;height:38px;font-size:1.3rem;flex:none}
+.mem-colors{display:flex;gap:7px;flex-wrap:wrap;padding:7px 10px 2px 48px}
+.mem-colors button{width:24px;height:24px;border-radius:50%;border:2px solid transparent;padding:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.mem-colors button[aria-pressed="true"]{border-color:var(--ink)}
+.warn{font-size:.82rem;color:var(--late);padding:6px 10px 0}
+.catrow .mem{border-color:color-mix(in srgb,var(--c) 35%,transparent);background:linear-gradient(180deg,var(--cbg),rgba(0,0,0,.15))}
+.caticon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--c);color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.caticon svg{width:19px;height:19px}
+.catedit{display:grid;gap:8px;padding:12px 10px 4px}
+.iconpick{display:flex;flex-wrap:wrap;gap:7px}
+.iconpick button{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid var(--line-2);color:var(--ink-2)}
+.iconpick button svg{width:20px;height:20px}
+.iconpick button[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+
+/* Notifications */
+.help h3{font-family:var(--f-display);text-transform:uppercase;font-weight:800;letter-spacing:.03em;font-size:1.2rem;margin:2px 0 6px}
+.help p,.help li{color:var(--ink-2);font-size:.95rem;margin:6px 0}
+.help ol{padding-left:22px;margin:6px 0}
+.help b{color:var(--ink)}
+.state{display:flex;align-items:center;gap:10px;font-weight:700}
+.state i{width:10px;height:10px;border-radius:50%;background:var(--ink-3);flex:none}
+.state.on i{background:var(--ok);box-shadow:0 0 10px var(--ok)} .state.off i{background:var(--soon)} .state.bad i{background:var(--late)}
+.kbd{font-family:var(--f-mono);font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid var(--line-2);border-radius:6px;padding:1px 6px;white-space:nowrap}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:11px 16px;border-radius:14px;font-weight:600;font-size:.92rem;z-index:40;max-width:calc(100% - 32px);text-align:center;color:var(--ink);background:rgba(30,42,36,.9);border:1px solid var(--line-2);box-shadow:0 10px 30px rgba(0,0,0,.45);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+
+<div class="wrap">
+  <header class="plate rivets">
+    <div class="top">
+      <div style="min-width:0">
+        <div class="eyebrow" id="today"></div>
+        <h1>Carnet de <span>famille</span></h1>
+        <div class="sync" id="sync"><i></i><span>Chargement…</span></div>
+      </div>
+      <div style="display:flex;gap:8px;padding-top:4px">
+        <button class="icon-btn glass" id="btnNotif" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="pip" id="notifPip" hidden></span>
+        </button>
+        <button class="icon-btn glass" id="btnMembers" aria-label="Membres et sauvegarde">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .7 3.2 2.6 3.6 5.2"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="alerts" id="alerts" hidden></section>
+
+  <div class="tools">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label for="q" class="sr">Rechercher</label>
+      <input id="q" type="search" placeholder="Rechercher : dentiste, assurance…" autocomplete="off">
+      <button class="clear" id="qClear" aria-label="Effacer la recherche" hidden>×</button>
+    </div>
+    <div class="chips" id="personChips" role="group" aria-label="Filtrer par personne"></div>
+    <div class="chips" id="catChips" role="group" aria-label="Filtrer par rubrique"></div>
+  </div>
+
+  <main id="content"></main>
+  <div class="foot" id="foot"></div>
+</div>
+
+<button class="fab glass-green" id="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Ajouter</button>
+
+<div id="layer"></div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+
+<script>
+(() => {
+"use strict";
+const CONFIG = Object.assign({ workerUrl:'', reminderHour:9 }, window.CARNET_CONFIG || {});
+
+/* ---------- Données de référence ---------- */
+const ICONS = {
+  ecole:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5M22 9v6"/></svg>',
+  animal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="10" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/><circle cx="18" cy="10" r="1.8"/><path d="M12 11c-3 0-5.5 4-5.5 6.2 0 1.6 1.3 2.3 2.7 2.3 1.2 0 1.8-.6 2.8-.6s1.6.6 2.8.6c1.4 0 2.7-.7 2.7-2.3C17.5 15 15 11 12 11Z"/></svg>',
+  argent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6.5A7 7 0 1 0 17 17.5"/><path d="M4 10.5h9M4 13.5h9"/></svg>',
+  travail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 13h18"/></svg>',
+  voyage:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5 3 11l1.5-1.5 7.5 1 4-4c1-1 2.8-1.5 3.5-.8s.2 2.5-.8 3.5l-4 4 1 7.5L14.2 22l-2.5-7.5"/></svg>',
+  sport:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 0 1 0 18M3 12h18M5.6 5.6c3 2.2 9.8 2.2 12.8 0M5.6 18.4c3-2.2 9.8-2.2 12.8 0"/></svg>',
+  papiers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  outil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3a4 4 0 0 1-5-5Z" transform="translate(-1 -1)"/><path d="M3 21l6-6"/></svg>',
+  etoile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9Z"/></svg>',
+  sante:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12.6 12 20l-7.5-7.4A4.8 4.8 0 0 1 12 6.3a4.8 4.8 0 0 1 7.5 6.3Z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/></svg>',
+  vehicule:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3v-5l2-5h11l3 5h2v5h-2"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5M5 12h14"/></svg>',
+  maison:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M12 12.5l-3 1.2v2c0 1.8 1.3 3 3 3.5 1.7-.5 3-1.7 3-3.5v-2Z"/></svg>',
+  activites:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="m12 13 1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 15.3l2-.3Z"/></svg>'
+};
+const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+const DEFAULT_CATS = [
+  {id:'sante',label:'Santé',color:'#DC735F',icon:'sante',sugg:['Consultation gynécologique','Médecin traitant','Dentiste','Ophtalmologue','Pédiatre','Vaccin (rappel)','Dermatologue','Prise de sang']},
+  {id:'vehicule',label:'Véhicule',color:'#7FA8CC',icon:'vehicule',sugg:['Contrôle technique','Révision','Vidange','Pneus hiver','Assurance auto','Carte grise']},
+  {id:'maison',label:'Maison et assurances',color:'#D8A64E',icon:'maison',sugg:['Assurance habitation','Mutuelle','Entretien chaudière','Ramonage','Taxe foncière','Contrat énergie','Box internet']},
+  {id:'activites',label:'Activités',color:'#57C2AA',icon:'activites',sugg:['Inscription','Certificat médical sport','Réunion parents-profs','Spectacle','Stage vacances','Anniversaire']}
+];
+const CAT_COLORS = ['#DC735F','#7FA8CC','#D8A64E','#57C2AA','#A98BD6','#E08BB0','#9DBF5A','#C98A6B','#6FB3D9','#B8B8A8'];
+const ICON_NAMES = ['sante','vehicule','maison','activites','ecole','animal','argent','travail','voyage','sport','papiers','outil','etoile'];
+let cats = DEFAULT_CATS.map(c=>Object.assign({},c));
+let catsSaved = false;
+const cat = id => cats.find(c=>c.id===id) || {id, label:'Rubrique supprimée', color:'#8A978F', icon:'etoile', sugg:[]};
+const icon = c => ICONS[c.icon] || ICONS.etoile;
+const MEMBER_COLORS = ['#3F8F68','#C4604E','#5F8DB8','#C4913F','#8A6BB8','#3E9C93','#A7563A','#6E7F76'];
+const DEFAULT_MEMBERS = [
+  {id:'m1',name:'Père',color:'#5F8DB8'},
+  {id:'m2',name:'Mère',color:'#C4604E'},
+  {id:'m3',name:'Enfant 1',color:'#3F8F68'},
+  {id:'m4',name:'Enfant 2',color:'#8A6BB8'},
+  {id:'m5',name:'Enfant 3',color:'#C4913F'}
+];
+const FAMILY = 'famille';
+const REMIND_OPTS = [
+  [null,'Pas de rappel'],[0,'Le jour même'],[1,'La veille'],[3,'3 jours avant'],
+  [7,'1 semaine avant'],[14,'2 semaines avant'],[30,'1 mois avant'],[60,'2 mois avant'],[90,'3 mois avant']
+];
+const FAM_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>';
+
+/* ---------- Dates ---------- */
+const pad = n => String(n).padStart(2,'0');
+const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse = s => { if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+const todayISO = () => iso(new Date());
+const addDays = (s,n) => { const d=parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const addMonths = (s,n) => { const d=parse(s); const day=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+n); const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate(); d.setDate(Math.min(day,last)); return iso(d); };
+const diffDays = (a,b) => Math.round((parse(b)-parse(a))/864e5);
+const MONTHS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+const shortDate = s => { const d=parse(s); return d.getDate()+' '+MONTHS[d.getMonth()]; };
+const fmt = s => { const d=parse(s); return d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); };
+const longDate = s => parse(s).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+function relLabel(n){
+  if(n===0) return "aujourd'hui";
+  if(n===1) return 'demain';
+  if(n===-1) return 'hier';
+  const a=Math.abs(n); let t;
+  if(a<32) t=a+' jours'; else if(a<60) t=Math.round(a/7)+' semaines'; else if(a<730) t=Math.round(a/30.4)+' mois'; else t=Math.round(a/365)+' ans';
+  return n>0 ? 'dans '+t : 'il y a '+t;
+}
+const hasRemind = c => !(c.remindDays===null||c.remindDays===undefined||c.remindDays==='');
+function status(card, today){
+  if(!card.nextDate) return {kind:'none'};
+  const n = diffDays(today, card.nextDate);
+  if(n<0) return {kind:'late', n};
+  if(hasRemind(card) && n<=Number(card.remindDays)) return {kind:'remind', n};
+  return {kind:'later', n};
+}
+
+/* ---------- État ---------- */
+let members = DEFAULT_MEMBERS.slice();
+let membersSaved = false;
+let cards = {};
+let filters = {person:'all', cat:'all', q:''};
+let mode = 'loading';     // loading | cloud (aperçu Claude) | local (app installée)
+let col = null;
+const LS_KEY = 'carnet-famille-v1', LS_UI = 'carnet-famille-ui', LS_SET = 'carnet-famille-settings';
+const lsGet = (k,d) => { try{ const v=JSON.parse(localStorage.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const lsSet = (k,v) => { try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } };
+const ui = lsGet(LS_UI, null); if(ui){ filters.person = ui.person===FAMILY ? 'all' : (ui.person||'all'); filters.cat = ui.cat||'all'; }
+let settings = Object.assign({pushOn:false, hour:CONFIG.reminderHour, deviceId:null, lastSync:null, next:null, scheduled:0, syncError:null}, lsGet(LS_SET, {}));
+const saveSettings = () => lsSet(LS_SET, settings);
+const saveUI = () => lsSet(LS_UI, {person:filters.person, cat:filters.cat});
+
+const uid = () => 'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const member = id => id===FAMILY ? {id:FAMILY,name:'Toute la famille',color:null} : (members.find(m=>m.id===id) || {id, name:'Membre retiré', color:'#6E7F76'});
+const avatar = m => m.id===FAMILY ? `<span class="av fam">${FAM_SVG}</span>` : `<span class="av" style="--m:${esc(m.color)}">${esc((m.name||'?').trim().charAt(0).toUpperCase())}</span>`;
+const catVars = id => { const c=esc(cat(id).color); return `--c:${c};--cbg:color-mix(in srgb,${c} 16%,transparent);--cink:color-mix(in srgb,${c} 58%,#fff)`; };
+
+/* ---------- Stockage ---------- */
+const queues = {};
+function queued(key, fn){ const p=(queues[key]||Promise.resolve()).then(fn, fn); queues[key]=p.catch(()=>{}); return p; }
+function localLoad(){ const raw=lsGet(LS_KEY,null); if(raw){ if(raw.members&&raw.members.length){members=raw.members;membersSaved=true;} if(raw.cats&&raw.cats.length){cats=raw.cats;catsSaved=true;} cards=raw.cards||{}; } }
+function localSave(){ if(!lsSet(LS_KEY,{members,cats,cards})) toast("Impossible d'enregistrer sur ce téléphone."); }
+
+async function persistCard(card){
+  cards[card.id]=card; render(); schedulePushSync();
+  if(mode==='cloud'){ await ensureMembers(); return queued(card.id,()=>col.doc(card.id).set(Object.assign({kind:'fiche'},card))).catch(()=>toast("L'enregistrement a échoué. Réessayez.")); }
+  localSave();
+}
+async function removeCard(id){
+  delete cards[id]; render(); schedulePushSync();
+  if(mode==='cloud') return queued(id,()=>col.doc(id).delete()).catch(()=>toast('La suppression a échoué.'));
+  localSave();
+}
+async function persistMembers(){
+  membersSaved=true; render(); schedulePushSync();
+  if(mode==='cloud') return queued('_membres',()=>col.doc('_membres').set({kind:'membres',list:members})).catch(()=>toast("L'enregistrement a échoué."));
+  localSave();
+}
+async function persistCats(){
+  catsSaved=true; render(); schedulePushSync();
+  if(mode==='cloud') return queued('_rubriques',()=>col.doc('_rubriques').set({kind:'rubriques',list:cats})).catch(()=>toast("L'enregistrement a échoué."));
+  localSave();
+}
+async function ensureMembers(){ if(!membersSaved) await persistMembers(); }
+
+async function initStore(){
+  let db=null, user=null, id=null;
+  try{
+    if(window.claude && typeof window.claude.use==='function'){
+      [db,user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+      if(db && user) id = await user.id();
+    }
+  }catch(e){ db=null; }
+  if(db && id){
+    col = db.collection('data/users/'+id);
+    mode='cloud'; setSync();
+    col.onSnapshot(snap=>{
+      const next={}; let mem=null;
+      snap.docs.forEach(d=>{ const v=d.data(); if(!v) return;
+        if(d.id==='_membres') mem=v.list;
+        else if(d.id==='_rubriques'){ if(v.list && v.list.length){ cats=v.list; catsSaved=true; } }
+        else if(v.kind==='fiche'){ const c=Object.assign({},v); delete c.kind; c.id=d.id; next[d.id]=c; } });
+      cards=next; if(mem && mem.length){ members=mem; membersSaved=true; }
+      render();
+    }, ()=>{ mode='local'; localLoad(); setSync("Connexion perdue — affichage sur cet appareil"); render(); });
+  } else {
+    mode='local'; localLoad(); setSync(); render();
+    try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+    if(settings.pushOn) schedulePushSync(true);
+  }
+}
+function setSync(msg){
+  const el=document.getElementById('sync');
+  el.className='sync '+(mode==='cloud'||mode==='local'?'ok':'warn');
+  el.querySelector('span').textContent = msg || (mode==='cloud' ? 'Aperçu · espace privé' : 'Enregistré sur ce téléphone');
+}
+
+/* ---------- Rendu ---------- */
+function filtered(){
+  const q = norm(filters.q).trim();
+  return Object.values(cards).filter(c=>{
+    if(filters.person!=='all' && c.memberId!==filters.person) return false;
+    if(filters.cat!=='all' && c.cat!==filters.cat) return false;
+    if(q){ const hay = norm([c.subject,c.note,member(c.memberId).name,cat(c.cat).label].join(' ')); if(!q.split(/\s+/).every(w=>hay.includes(w))) return false; }
+    return true;
+  });
+}
+function renderChips(){
+  const pc=document.getElementById('personChips');
+  if(filters.person!=='all' && !members.some(m=>m.id===filters.person)) filters.person='all';
+  pc.innerHTML = `<button class="chip glass" data-person="all" aria-pressed="${filters.person==='all'}">${avatar(member(FAMILY))}Toute la famille</button>` +
+    members.map(m=>`<button class="chip glass" data-person="${esc(m.id)}" aria-pressed="${filters.person===m.id}">${avatar(m)}${esc(m.name)}</button>`).join('') +
+    `<button class="chip glass add" data-act="members" aria-label="Ajouter ou modifier les membres">${PLUS}Membre</button>`;
+  if(filters.cat!=='all' && !cats.some(c=>c.id===filters.cat)) filters.cat='all';
+  document.getElementById('catChips').innerHTML = `<button class="chip glass noav" data-cat="all" aria-pressed="${filters.cat==='all'}">Toutes les rubriques</button>` +
+    cats.map(c=>`<button class="chip glass cat" style="${catVars(c.id)}" data-cat="${esc(c.id)}" aria-pressed="${filters.cat===c.id}"><span class="sw"></span>${esc(c.label)}</button>`).join('') +
+    `<button class="chip glass add" data-act="cats" aria-label="Créer ou modifier les rubriques">${PLUS}Rubrique</button>`;
+  updateFades(pc); updateFades(document.getElementById('catChips'));
+}
+function updateFades(el){
+  const max=el.scrollWidth-el.clientWidth;
+  el.classList.toggle('more-l', el.scrollLeft>4);
+  el.classList.toggle('more-r', el.scrollLeft<max-4);
+}
+function revealPressed(el){ const b=el.querySelector('[aria-pressed="true"]'); if(!b) return;
+  const l=b.offsetLeft-el.offsetLeft, r=l+b.offsetWidth;
+  if(l<el.scrollLeft+8) el.scrollTo({left:Math.max(0,l-24),behavior:'smooth'});
+  else if(r>el.scrollLeft+el.clientWidth-8) el.scrollTo({left:r-el.clientWidth+34,behavior:'smooth'}); }
+/* Glisser au doigt (natif) et à la souris */
+function dragScroll(el){
+  let down=false, sx=0, sl=0, moved=false;
+  el.addEventListener('scroll',()=>updateFades(el),{passive:true});
+  el.addEventListener('pointerdown',e=>{ if(e.pointerType!=='mouse' || e.button!==0) return; down=true; moved=false; sx=e.clientX; sl=el.scrollLeft; });
+  window.addEventListener('pointermove',e=>{ if(!down) return; const dx=e.clientX-sx; if(!moved && Math.abs(dx)>5){ moved=true; el.classList.add('dragging'); } if(moved) el.scrollLeft=sl-dx; });
+  window.addEventListener('pointerup',()=>{ if(!down) return; down=false; el.classList.remove('dragging'); });
+  el.addEventListener('click',e=>{ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } },true);
+  el.addEventListener('wheel',e=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX) && el.scrollWidth>el.clientWidth){ el.scrollLeft+=e.deltaY; e.preventDefault(); } },{passive:false});
+}
+window.addEventListener('resize',()=>{ updateFades(document.getElementById('personChips')); updateFades(document.getElementById('catChips')); });
+function remindText(c){ if(!hasRemind(c)) return 'Pas de rappel'; const o=REMIND_OPTS.find(o=>o[0]===Number(c.remindDays)); return o?o[1]:c.remindDays+' j avant'; }
+function cardHTML(c, today){
+  const m=member(c.memberId), k=cat(c.cat), st=status(c,today);
+  const d=c.nextDate?parse(c.nextDate):null;
+  const box = d ? `<div class="datebox"><span class="d">${d.getDate()}</span><span class="m">${MONTHS[d.getMonth()].replace('.','')}</span><span class="y">${d.getFullYear()}</span></div>`
+                : `<div class="datebox none"><span class="m">Sans<br>date</span></div>`;
+  let rel='';
+  if(d){
+    const cls = st.kind==='late'?'late':(st.kind==='remind'?'soon':'');
+    rel = `<div class="rel"><b class="${cls}">${st.kind==='late'?'En retard · ':''}${relLabel(st.n)}</b><span class="bell">${BELL}${esc(remindText(c))}</span></div>`;
+  }
+  return `<button class="card" data-open="${esc(c.id)}" style="${catVars(k.id)}">
+    <div class="main">
+      <span class="pill">${icon(k)}${esc(k.label)}${c.example?' <span class="ex">Exemple</span>':''}</span>
+      <span class="subj">${esc(c.subject||'Sans titre')}</span>
+      <span class="who">${avatar(m)}${esc(m.name)}</span>
+      ${c.lastDate?`<span class="meta">Dernière fois : ${fmt(c.lastDate)}</span>`:''}
+      ${c.note?`<span class="note">${esc(c.note)}</span>`:''}
+    </div>${box}${rel}</button>`;
+}
+function alertItems(today){
+  return Object.values(cards).map(c=>({c,st:status(c,today)})).filter(x=>x.st.kind==='late'||x.st.kind==='remind')
+    .sort((a,b)=>a.c.nextDate.localeCompare(b.c.nextDate));
+}
+function render(){
+  const today=todayISO();
+  document.getElementById('today').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  renderChips(); renderAlerts(today); renderNotifPip();
+  const content=document.getElementById('content');
+  const all=Object.values(cards);
+  if(mode==='loading'){ content.innerHTML='<div class="empty"><p>Chargement de vos fiches…</p></div>'; return; }
+  if(!all.length){
+    content.innerHTML=`<div class="empty"><h2>Aucune fiche</h2>
+      <p>Ajoutez une première échéance : un rendez-vous médical, un contrôle technique, une assurance à renouveler…</p>
+      <div class="row"><button class="btn glass-green" data-act="new">Ajouter une fiche</button><button class="btn glass" data-act="examples">Voir avec des exemples</button></div></div>`;
+    renderFoot(); return;
+  }
+  const list=filtered();
+  if(!list.length){ content.innerHTML=`<div class="empty"><h2>Aucun résultat</h2><p>Aucune fiche ne correspond à la recherche ou aux filtres.</p><div class="row"><button class="btn glass" data-act="reset">Tout afficher</button></div></div>`; renderFoot(); return; }
+  const groups=[['late','En retard',[]],['w','Cette semaine',[]],['m','Dans le mois',[]],['q','Dans les 3 mois',[]],['l','Plus tard',[]],['n','Sans échéance',[]]];
+  list.forEach(c=>{ if(!c.nextDate){groups[5][2].push(c);return;} const n=diffDays(today,c.nextDate);
+    groups[n<0?0 : n<=7?1 : n<=31?2 : n<=92?3 : 4][2].push(c); });
+  groups.forEach(g=>g[2].sort((a,b)=> (a.nextDate||'9999').localeCompare(b.nextDate||'9999') || (a.subject||'').localeCompare(b.subject||'')));
+  content.innerHTML = groups.filter(g=>g[2].length).map(g=>`<section class="group ${g[0]==='late'?'late':''}"><h3><span>${g[1]}</span><span class="n">${g[2].length}</span></h3><div class="list">${g[2].map(c=>cardHTML(c,today)).join('')}</div></section>`).join('');
+  renderFoot();
+}
+function renderAlerts(today){
+  const el=document.getElementById('alerts'), items=alertItems(today);
+  try{ if(mode==='local' && navigator.setAppBadge){ items.length ? navigator.setAppBadge(items.length) : navigator.clearAppBadge(); } }catch(e){}
+  if(!items.length){ el.hidden=true; el.innerHTML=''; return; }
+  el.hidden=false;
+  el.innerHTML = `<h2>À ne pas oublier <span class="count">${items.length}</span></h2>` + items.slice(0,3).map(({c,st})=>{
+    const m=member(c.memberId);
+    return `<button class="alert-row" data-open="${esc(c.id)}"><span class="dot" style="background:${esc(cat(c.cat).color)}"></span>
+      <span class="t"><b>${esc(c.subject)}</b><span>${esc(m.name)} · ${shortDate(c.nextDate)}</span></span>
+      <span class="tag ${st.kind==='late'?'late':'soon'}">${st.kind==='late'?'En retard':(st.n===0?"Aujourd'hui":st.n===1?'Demain':'J-'+st.n)}</span></button>`;
+  }).join('') + (items.length>3?`<div style="font-size:.84rem;color:var(--ink-3);padding:6px 0 8px">+ ${items.length-3} autre(s) dans la liste ci-dessous</div>`:'');
+}
+function renderFoot(){
+  const hasEx = Object.values(cards).some(c=>c.example);
+  document.getElementById('foot').innerHTML =
+    (hasEx?'<button class="link-btn" data-act="clearExamples">Supprimer les exemples</button>':'') +
+    '<button class="link-btn" data-act="notif">Notifications</button><button class="link-btn" data-act="cats">Rubriques</button><button class="link-btn" data-act="members">Membres et sauvegarde</button>';
+}
+function renderNotifPip(){ document.getElementById('notifPip').hidden = !(settings.pushOn && pushState().kind==='ready' && permission()==='granted'); }
+
+/* ---------- Feuilles ---------- */
+const layer=document.getElementById('layer');
+let lastFocus=null;
+function openSheet(html, onMount){
+  lastFocus=document.activeElement;
+  layer.innerHTML=`<div class="scrim" data-scrim><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  document.body.style.overflow='hidden';
+  onMount && onMount(layer.querySelector('.sheet'));
+}
+function closeSheet(){ layer.innerHTML=''; document.body.style.overflow=''; lastFocus && lastFocus.focus && lastFocus.focus(); }
+layer.addEventListener('click',e=>{ if(e.target.hasAttribute('data-scrim')) closeSheet(); if(e.target.closest('[data-close]')) closeSheet(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && layer.innerHTML) closeSheet(); });
+const head = t => `<div class="sheet-head"><h2>${t}</h2><button class="icon-btn glass" data-close aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
+
+/* Formulaire fiche */
+function openCard(id){
+  const isNew=!id || !cards[id];
+  const f = isNew ? {id:uid(), memberId: filters.person!=='all'?filters.person:FAMILY, cat: filters.cat!=='all'?filters.cat:cats[0].id, subject:'', lastDate:'', nextDate:'', note:'', remindDays:14} : Object.assign({},cards[id]);
+  const remindSel = REMIND_OPTS.map(([v,l])=>`<option value="${v===null?'':v}" ${String(f.remindDays??'')===String(v??'')?'selected':''}>${l}</option>`).join('');
+  openSheet(`${head(isNew?'Nouvelle fiche':'Modifier la fiche')}
+  <form class="sheet-body" id="cardForm" novalidate>
+    <div class="field"><span class="lab">Personne concernée</span><div class="pick" id="pPerson"></div></div>
+    <div class="field"><span class="lab">Rubrique</span><div class="catpick" id="pCat"></div></div>
+    <div class="field"><label for="fSubject">Sujet</label><input id="fSubject" required maxlength="120" value="${esc(f.subject)}" placeholder="Ex. Consultation gynécologique"><div class="sugg" id="sugg"></div></div>
+    <div class="two">
+      <div class="field"><label for="fLast">Dernière date</label><input id="fLast" type="date" value="${esc(f.lastDate)}"><span class="hint">Facultatif</span></div>
+      <div class="field"><label for="fNext">Prochaine échéance</label><input id="fNext" type="date" value="${esc(f.nextDate)}"><span class="hint">Date recommandée ou limite</span></div>
+    </div>
+    <div class="field" id="quickNext"><span class="hint">Calculer depuis la dernière date :</span>
+      <div class="sugg"><button type="button" data-plus="6">+ 6 mois</button><button type="button" data-plus="12">+ 1 an</button><button type="button" data-plus="24">+ 2 ans</button><button type="button" data-plus="36">+ 3 ans</button></div></div>
+    <div class="field"><label for="fRemind">Rappel</label><select id="fRemind">${remindSel}</select><span class="hint" id="remindHint"></span></div>
+    <div class="field"><label for="fNote">Note</label><textarea id="fNote" maxlength="1000" placeholder="Praticien, numéro de contrat, document à apporter…">${esc(f.note)}</textarea></div>
+    ${isNew?'':`<div class="info-box"><b>Rendez-vous passé ?</b>La date du jour devient la dernière date ; indiquez ensuite la prochaine date recommandée.<div class="row-actions"><button type="button" class="btn glass" id="bDone">C'est fait aujourd'hui</button></div></div>`}
+    ${isNew?'':'<div class="row-actions"><button type="button" class="btn glass danger" id="bDel">Supprimer la fiche</button></div>'}
+  </form>
+  <div class="sheet-foot"><button class="btn glass" data-close type="button">Annuler</button><button class="btn glass-green" id="bSave" type="button">Enregistrer</button></div>`, sheet=>{
+    const $=s=>sheet.querySelector(s);
+    const pP=$('#pPerson'), pC=$('#pCat'), sug=$('#sugg');
+    const drawPerson=()=>{ pP.innerHTML=[{id:FAMILY}].concat(members).map(m=>{ const mm=member(m.id); return `<button type="button" class="glass" data-v="${esc(mm.id)}" aria-pressed="${f.memberId===mm.id}">${avatar(mm)}${esc(mm.name)}</button>`; }).join(''); };
+    const drawCat=()=>{ pC.innerHTML=cats.map(c=>`<button type="button" style="${catVars(c.id)}" data-v="${esc(c.id)}" aria-pressed="${f.cat===c.id}">${icon(c)}${esc(c.label)}</button>`).join('');
+      sug.innerHTML=(cat(f.cat).sugg||[]).map(s=>`<button type="button">${esc(s)}</button>`).join(''); };
+    const drawHint=()=>{ const r=$('#fRemind').value, n=$('#fNext').value, h=$('#remindHint');
+      if(r===''){ h.textContent='Aucune notification pour cette fiche.'; return; }
+      const when = n ? (Number(r)>0 ? `le ${longDate(addDays(n,-Number(r)))} puis le jour J` : `le ${longDate(n)}`) : 'dès que la prochaine échéance sera indiquée';
+      h.textContent = `Notification à ${settings.hour} h ${when}. La fiche remonte aussi dans « À ne pas oublier ».`; };
+    drawPerson(); drawCat(); drawHint();
+    pP.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.memberId=b.dataset.v; drawPerson(); });
+    pC.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.cat=b.dataset.v; drawCat(); });
+    sug.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; $('#fSubject').value=b.textContent; });
+    $('#quickNext').addEventListener('click',e=>{ const b=e.target.closest('[data-plus]'); if(!b) return;
+      if(!$('#fLast').value) $('#fLast').value=todayISO();
+      $('#fNext').value=addMonths($('#fLast').value, Number(b.dataset.plus)); drawHint(); });
+    ['#fNext','#fRemind'].forEach(s=>$(s).addEventListener('change',drawHint));
+    const bDone=$('#bDone');
+    bDone && bDone.addEventListener('click',()=>{ $('#fLast').value=todayISO(); $('#fNext').value=''; drawHint(); $('#fNext').focus(); toast('Indiquez la prochaine date, puis Enregistrer'); });
+    const bDel=$('#bDel');
+    bDel && bDel.addEventListener('click',()=>{ if(!bDel.classList.contains('armed')){ bDel.classList.add('armed'); bDel.textContent='Confirmer la suppression'; return; } removeCard(f.id); closeSheet(); toast('Fiche supprimée'); });
+    $('#cardForm').addEventListener('submit',e=>e.preventDefault());
+    $('#bSave').addEventListener('click',()=>{
+      const subject=$('#fSubject').value.trim();
+      if(!subject){ $('#fSubject').focus(); toast('Indiquez un sujet'); return; }
+      const r=$('#fRemind').value;
+      const out={id:f.id,memberId:f.memberId,cat:f.cat,subject,lastDate:$('#fLast').value||'',nextDate:$('#fNext').value||'',note:$('#fNote').value.trim(),remindDays:r===''?null:Number(r),updatedAt:new Date().toISOString()};
+      if(f.example) out.example=true;
+      persistCard(out); closeSheet(); toast(isNew?'Fiche ajoutée':'Fiche enregistrée');
+    });
+  });
+}
+
+/* ---------- Notifications push ---------- */
+const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+const isStandalone = () => window.navigator.standalone===true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+const permission = () => (typeof Notification!=='undefined' ? Notification.permission : 'unsupported');
+function pushState(){
+  if(mode==='cloud' || window.claude) return {kind:'preview'};
+  if(!CONFIG.workerUrl) return {kind:'noconfig'};
+  if(isIOS && !isStandalone()) return {kind:'install'};
+  if(!('serviceWorker' in navigator) || !('PushManager' in window) || typeof Notification==='undefined') return {kind:'unsupported'};
+  return {kind:'ready'};
+}
+const b64uToBytes = s => { s=s.replace(/-/g,'+').replace(/_/g,'/'); const bin=atob(s+'==='.slice((s.length+3)%4)); return Uint8Array.from(bin,c=>c.charCodeAt(0)); };
+const bytesEq = (a,b) => { if(!a||!b||a.byteLength!==b.byteLength) return false; const x=new Uint8Array(a), y=new Uint8Array(b); return x.every((v,i)=>v===y[i]); };
+const api = (path, body) => fetch(CONFIG.workerUrl.replace(/\/$/,'')+path, body ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)} : {}).then(async r=>{ const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||('Erreur '+r.status)); return j; });
+
+function buildReminders(){
+  const out=[], now=Date.now(), horizon=now+400*864e5, h=Number(settings.hour)||9;
+  const at = s => { const d=parse(s); d.setHours(h,0,0,0); return d; };
+  for(const c of Object.values(cards)){
+    if(!c.nextDate || !hasRemind(c)) continue;
+    const m=member(c.memberId).name, title=`${c.subject} — ${m}`, r=Number(c.remindDays);
+    if(r>0){ const d=at(addDays(c.nextDate,-r)); if(d>now && d<horizon) out.push({at:d.toISOString(),title,body:`${relLabel(r).replace(/^./,x=>x.toUpperCase())} · ${longDate(c.nextDate)}`,tag:c.id.slice(0,40)+'-r'}); }
+    const d=at(c.nextDate); if(d>now && d<horizon) out.push({at:d.toISOString(),title,body:`C'est aujourd'hui · ${cat(c.cat).label}`,tag:c.id.slice(0,40)+'-j'});
+  }
+  return out;
+}
+async function getSubscription(create){
+  const reg = await navigator.serviceWorker.ready;
+  const {publicKey} = await api('/vapid');
+  const key=b64uToBytes(publicKey);
+  let sub = await reg.pushManager.getSubscription();
+  if(sub && sub.options && sub.options.applicationServerKey && !bytesEq(sub.options.applicationServerKey, key.buffer)){ await sub.unsubscribe(); sub=null; }
+  if(!sub && create) sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:key});
+  return sub;
+}
+let syncTimer=null;
+function schedulePushSync(now){
+  if(!settings.pushOn || pushState().kind!=='ready' || permission()!=='granted') return;
+  clearTimeout(syncTimer); syncTimer=setTimeout(syncPush, now?0:1500);
+}
+async function syncPush(){
+  try{
+    const sub = await getSubscription(true);
+    if(!settings.deviceId){ settings.deviceId = (crypto.randomUUID?crypto.randomUUID():uid()+uid()).replace(/[^A-Za-z0-9-]/g,''); }
+    const res = await api('/sync',{id:settings.deviceId, subscription:sub.toJSON(), reminders:buildReminders()});
+    Object.assign(settings,{lastSync:new Date().toISOString(), next:res.next, scheduled:res.scheduled, syncError:null});
+  }catch(e){ settings.syncError = e.message || String(e); }
+  saveSettings(); refreshNotifSheet();
+}
+async function enablePush(){
+  try{
+    const p = await Notification.requestPermission();
+    if(p!=='granted'){ toast('Notifications refusées. Voir les réglages ci-dessous.'); refreshNotifSheet(); return; }
+    settings.pushOn=true; saveSettings(); await syncPush();
+    toast(settings.syncError ? 'Activation incomplète : '+settings.syncError : 'Notifications activées'); renderNotifPip();
+  }catch(e){ toast("L'activation a échoué : "+(e.message||e)); }
+}
+async function disablePush(){
+  settings.pushOn=false; saveSettings();
+  try{ if(settings.deviceId) await api('/unsubscribe',{id:settings.deviceId}); const reg=await navigator.serviceWorker.ready; const s=await reg.pushManager.getSubscription(); s && await s.unsubscribe(); }catch(e){}
+  Object.assign(settings,{next:null,scheduled:0,lastSync:null}); saveSettings(); refreshNotifSheet(); renderNotifPip(); toast('Notifications désactivées');
+}
+async function testPush(){
+  try{ await syncPush(); await api('/test',{id:settings.deviceId}); toast('Notification de test envoyée'); }
+  catch(e){ toast("Échec de l'envoi : "+(e.message||e)); }
+}
+
+function notifStatusHTML(){
+  const st=pushState(), perm=permission();
+  if(st.kind==='preview') return `<div class="info-box"><div class="state off"><i></i>Aperçu dans Claude</div>Les notifications fonctionnent dans l'application installée sur le téléphone (version GitHub). Ici, les rappels s'affichent dans « À ne pas oublier ».</div>`;
+  if(st.kind==='noconfig') return `<div class="info-box"><div class="state bad"><i></i>Service d'envoi non configuré</div><span>Renseignez l'adresse du service Cloudflare dans le fichier <span class="kbd">config.js</span> sur GitHub.</span></div>`;
+  if(st.kind==='install') return `<div class="info-box"><div class="state off"><i></i>Installez d'abord l'application</div>
+    <ol style="margin:0;padding-left:20px"><li>Ouvrez cette page dans <b>Safari</b>.</li><li>Touchez le bouton <b>Partager</b> (carré avec une flèche).</li><li>Choisissez <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li><li>Ouvrez « Carnet » depuis l'écran d'accueil et revenez ici.</li></ol>
+    <span>Les fiches saisies dans Safari ne sont pas reprises dans l'app installée : installez-la avant de commencer.</span></div>`;
+  if(st.kind==='unsupported') return `<div class="info-box"><div class="state bad"><i></i>Non pris en charge</div>Ce navigateur ne permet pas les notifications. Sur iPhone, il faut iOS 16.4 ou plus récent et l'app ajoutée à l'écran d'accueil.</div>`;
+  if(perm==='denied') return `<div class="info-box"><div class="state bad"><i></i>Notifications bloquées</div>Réglages de l'iPhone › <b>Notifications</b> › <b>Carnet</b> › activez « Autoriser les notifications », puis rouvrez l'app.</div>`;
+  const hours=[7,8,9,10,12,14,18,19,20].map(h=>`<option value="${h}" ${Number(settings.hour)===h?'selected':''}>${h} h</option>`).join('');
+  if(!settings.pushOn || perm!=='granted') return `<div class="info-box"><div class="state off"><i></i>Notifications désactivées</div>
+    <span>L'iPhone vous demandera l'autorisation. Répondez « Autoriser ».</span>
+    <div class="row-actions"><button class="btn glass-green" id="bPushOn" type="button">Activer les notifications</button></div></div>`;
+  const next = settings.next ? new Date(settings.next).toLocaleString('fr-FR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}) : null;
+  return `<div class="info-box"><div class="state ${settings.syncError?'bad':'on'}"><i></i>${settings.syncError?'Erreur de synchronisation':'Notifications activées'}</div>
+    ${settings.syncError?`<span>${esc(settings.syncError)}</span>`:`<span>${settings.scheduled||0} notification(s) programmée(s)${next?`. Prochaine : <b>${esc(next)}</b>`:''}.</span>`}
+    <div class="field"><label for="fHour">Heure des notifications</label><select id="fHour">${hours}</select></div>
+    <div class="row-actions"><button class="btn glass" id="bTest" type="button">Envoyer un test</button><button class="btn glass" id="bResync" type="button">Resynchroniser</button><button class="btn glass danger" id="bPushOff" type="button">Désactiver</button></div></div>`;
+}
+function openNotif(){
+  openSheet(`${head('Notifications')}
+  <div class="sheet-body help">
+    <div id="notifStatus">${notifStatusHTML()}</div>
+    <div><h3>Comment ça marche</h3>
+      <p>Pour chaque fiche avec un rappel, le téléphone reçoit <b>deux notifications</b> : une au moment du rappel (par ex. 2 semaines avant) et une le jour de l'échéance, à l'heure choisie. Elles arrivent même quand l'application est fermée.</p>
+      <p>À chaque ajout ou modification, l'app envoie la liste des prochains rappels au petit service d'envoi (Cloudflare). Il ne reçoit que la date, le sujet et la personne ; les notes restent sur le téléphone.</p></div>
+    <div><h3>Réglages de l'iPhone à vérifier</h3>
+      <ol><li>iOS 16.4 ou plus récent (Réglages › Général › Informations).</li>
+      <li>L'app est ouverte depuis l'<b>écran d'accueil</b>, pas depuis Safari.</li>
+      <li>Réglages › Notifications › <b>Carnet</b> : autoriser, et cocher Écran verrouillé, Centre de notifications et Bannières.</li>
+      <li>Modes de concentration (Ne pas déranger, Sommeil) : ajoutez « Carnet » aux apps autorisées si besoin.</li>
+      <li>Ouvrez l'app de temps en temps : cela garde la liste des rappels à jour.</li></ol></div>
+  </div>
+  <div class="sheet-foot"><button class="btn glass-green" data-close type="button">Fermer</button></div>`, bindNotif);
+}
+function bindNotif(sheet){
+  const on=(id,fn)=>{ const b=sheet.querySelector(id); b && b.addEventListener('click',fn); };
+  on('#bPushOn',enablePush); on('#bPushOff',disablePush); on('#bTest',testPush); on('#bResync',()=>{ syncPush().then(()=>toast(settings.syncError?'Échec : '+settings.syncError:'Rappels synchronisés')); });
+  const h=sheet.querySelector('#fHour'); h && h.addEventListener('change',()=>{ settings.hour=Number(h.value); saveSettings(); syncPush(); });
+}
+function refreshNotifSheet(){ const el=document.getElementById('notifStatus'); if(el){ el.innerHTML=notifStatusHTML(); bindNotif(el); } renderNotifPip(); }
+
+/* ---------- Membres + sauvegarde ---------- */
+function openMembers(){
+  let draft = members.map(m=>Object.assign({},m));
+  const used = id => Object.values(cards).filter(c=>c.memberId===id).length;
+  openSheet(`${head('Membres')}
+    <div class="sheet-body">
+      <p style="margin:0;color:var(--ink-2)">Renommez, ajoutez ou retirez des membres. « Toute la famille » affiche toujours les fiches de tout le monde.</p>
+      <div id="memList" style="display:grid;gap:12px"></div>
+      <button class="btn glass" id="bAddMem" type="button">+ Ajouter un membre</button>
+      <div class="info-box"><b>Sauvegarde</b>
+        <span>${mode==='cloud'?'Dans cet aperçu, les fiches sont gardées dans votre espace privé Claude.':'Les fiches sont enregistrées uniquement sur ce téléphone.'} Exportez une copie de temps en temps : elle permet de tout récupérer sur un autre téléphone.</span>
+        <div class="row-actions"><button class="btn glass" id="bExport" type="button">Exporter une copie</button><button class="btn glass" id="bImport" type="button">Importer une copie</button></div>
+      </div>
+    </div>
+    <div class="sheet-foot"><button class="btn glass" data-close type="button">Annuler</button><button class="btn glass-green" id="bSaveMem" type="button">Enregistrer</button></div>`, sheet=>{
+    const list=sheet.querySelector('#memList');
+    const draw=()=>{ list.innerHTML=draft.map((m,i)=>`<div><div class="mem">${avatar(m)}<label class="sr" for="mn${i}">Nom</label><input id="mn${i}" data-i="${i}" value="${esc(m.name)}" maxlength="30">
+      <button class="del" type="button" data-del="${i}" aria-label="Retirer ${esc(m.name)}">×</button></div>
+      <div class="mem-colors">${MEMBER_COLORS.map(c=>`<button type="button" style="background:${c}" data-col="${i}|${c}" aria-pressed="${m.color===c}" aria-label="Couleur"></button>`).join('')}</div>
+      ${m._warn?`<div class="warn">${m._warn}</div>`:''}</div>`).join(''); };
+    draw();
+    list.addEventListener('input',e=>{ const i=e.target.dataset.i; if(i!==undefined) draft[i].name=e.target.value; });
+    list.addEventListener('click',e=>{
+      const c=e.target.closest('[data-col]'); if(c){ const [i,col]=c.dataset.col.split('|'); draft[i].color=col; draw(); return; }
+      const d=e.target.closest('[data-del]'); if(d){ const i=+d.dataset.del, m=draft[i], n=used(m.id);
+        if(n && !m._armed){ m._armed=true; m._warn=`${n} fiche(s) concernent ${esc(m.name)}. Elles passeront à « Toute la famille ». Touchez × à nouveau pour confirmer.`; draw(); return; }
+        draft.splice(i,1); draw(); }
+    });
+    sheet.querySelector('#bAddMem').addEventListener('click',()=>{ draft.push({id:'m'+Date.now().toString(36),name:'Nouveau membre',color:MEMBER_COLORS[draft.length%MEMBER_COLORS.length]}); draw(); const inp=list.querySelector(`#mn${draft.length-1}`); inp.focus(); inp.select(); });
+    sheet.querySelector('#bExport').addEventListener('click',exportData);
+    sheet.querySelector('#bImport').addEventListener('click',()=>document.getElementById('importFile').click());
+    sheet.querySelector('#bSaveMem').addEventListener('click',async()=>{
+      const clean=draft.map(m=>({id:m.id,name:(m.name||'').trim()||'Sans nom',color:m.color}));
+      const ids=new Set(clean.map(m=>m.id));
+      const orphans=Object.values(cards).filter(c=>c.memberId!==FAMILY && !ids.has(c.memberId));
+      members=clean; await persistMembers();
+      for(const c of orphans){ await persistCard(Object.assign({},c,{memberId:FAMILY})); }
+      closeSheet(); toast('Membres enregistrés');
+    });
+  });
+}
+/* ---------- Rubriques ---------- */
+function openCats(){
+  let draft = cats.map(c=>Object.assign({},c));
+  let open = null; // index de la rubrique dépliée
+  const used = id => Object.values(cards).filter(c=>c.cat===id).length;
+  openSheet(`${head('Rubriques')}
+    <div class="sheet-body">
+      <p style="margin:0;color:var(--ink-2)">Créez vos propres rubriques, renommez-les, choisissez une couleur et un pictogramme.</p>
+      <div id="catList" style="display:grid;gap:10px"></div>
+      <button class="btn glass" id="bAddCat" type="button">${PLUS}Nouvelle rubrique</button>
+    </div>
+    <div class="sheet-foot"><button class="btn glass" data-close type="button">Annuler</button><button class="btn glass-green" id="bSaveCats" type="button">Enregistrer</button></div>`, sheet=>{
+    const list=sheet.querySelector('#catList');
+    const draw=()=>{ list.innerHTML=draft.map((c,i)=>{ const st=`--c:${esc(c.color)};--cbg:color-mix(in srgb,${esc(c.color)} 16%,transparent);--cink:color-mix(in srgb,${esc(c.color)} 58%,#fff)`;
+      return `<div class="catrow" style="${st}">
+        <div class="mem"><span class="caticon">${icon(c)}</span><label class="sr" for="cn${i}">Nom de la rubrique</label><input id="cn${i}" data-i="${i}" value="${esc(c.label)}" maxlength="32" placeholder="Nom de la rubrique">
+          <button class="del" type="button" data-toggle="${i}" aria-expanded="${open===i}" aria-label="Couleur et pictogramme"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="${open===i?'m6 15 6-6 6 6':'m6 9 6 6 6-6'}"/></svg></button>
+          <button class="del" type="button" data-del="${i}" aria-label="Supprimer ${esc(c.label)}">×</button></div>
+        ${open===i?`<div class="catedit">
+          <span class="hint">Couleur</span><div class="mem-colors" style="padding:0">${CAT_COLORS.map(col=>`<button type="button" style="background:${col}" data-col="${i}|${col}" aria-pressed="${c.color===col}" aria-label="Couleur"></button>`).join('')}</div>
+          <span class="hint">Pictogramme</span><div class="iconpick">${ICON_NAMES.map(n=>`<button type="button" data-ic="${i}|${n}" aria-pressed="${c.icon===n}" aria-label="${n}">${ICONS[n]}</button>`).join('')}</div>
+        </div>`:''}
+        ${c._warn?`<div class="warn">${c._warn}</div>`:''}</div>`; }).join(''); };
+    draw();
+    list.addEventListener('input',e=>{ const i=e.target.dataset.i; if(i!==undefined) draft[i].label=e.target.value; });
+    list.addEventListener('click',e=>{
+      const t=e.target.closest('[data-toggle]'); if(t){ const i=+t.dataset.toggle; open = open===i?null:i; draw(); return; }
+      const c=e.target.closest('[data-col]'); if(c){ const [i,col]=c.dataset.col.split('|'); draft[i].color=col; draw(); return; }
+      const ic=e.target.closest('[data-ic]'); if(ic){ const [i,n]=ic.dataset.ic.split('|'); draft[i].icon=n; draw(); return; }
+      const d=e.target.closest('[data-del]'); if(d){ const i=+d.dataset.del, k=draft[i], n=used(k.id);
+        if(draft.length<=1){ k._warn='Il faut garder au moins une rubrique.'; draw(); return; }
+        if(n){ k._warn=`${n} fiche(s) utilisent « ${esc(k.label)} ». Changez leur rubrique avant de la supprimer.`; draw(); return; }
+        draft.splice(i,1); if(open===i) open=null; draw(); }
+    });
+    sheet.querySelector('#bAddCat').addEventListener('click',()=>{
+      const usedCols=new Set(draft.map(c=>c.color)); const col=CAT_COLORS.find(c=>!usedCols.has(c))||CAT_COLORS[draft.length%CAT_COLORS.length];
+      draft.push({id:'r'+Date.now().toString(36),label:'',color:col,icon:'etoile',sugg:[]}); open=draft.length-1; draw();
+      const inp=list.querySelector(`#cn${draft.length-1}`); inp.focus(); });
+    sheet.querySelector('#bSaveCats').addEventListener('click',async()=>{
+      const empty=draft.findIndex(c=>!(c.label||'').trim());
+      if(empty>=0){ draft[empty]._warn='Donnez un nom à cette rubrique.'; draw(); list.querySelector(`#cn${empty}`).focus(); return; }
+      cats=draft.map(c=>({id:c.id,label:c.label.trim(),color:c.color,icon:c.icon,sugg:c.sugg||[]}));
+      await persistCats(); closeSheet(); toast('Rubriques enregistrées');
+    });
+  });
+}
+
+async function exportData(){
+  const name='carnet-famille-'+todayISO()+'.json';
+  const data=JSON.stringify({app:'carnet-famille',version:1,exportedAt:new Date().toISOString(),members,cats,cards:Object.values(cards)},null,2);
+  let dl=null; try{ dl = window.claude ? await window.claude.use('downloads') : null; }catch(e){}
+  if(dl){ try{ await dl.save({filename:name,data}); toast('Copie exportée'); }catch(e){ if(e && e.code!=='declined') toast("L'export a échoué."); } return; }
+  try{
+    const file=new File([data],name,{type:'application/json'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'Copie du Carnet de famille'}); return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1500);
+  }catch(e){ if(e && e.name!=='AbortError') toast("L'export a échoué."); }
+}
+document.getElementById('importFile').addEventListener('change',async e=>{
+  const file=e.target.files[0]; e.target.value=''; if(!file) return;
+  try{
+    const raw=JSON.parse(await file.text());
+    if(raw.app!=='carnet-famille' || !Array.isArray(raw.cards)) throw new Error('format');
+    if(Array.isArray(raw.members) && raw.members.length){ members=raw.members; await persistMembers(); }
+    if(Array.isArray(raw.cats) && raw.cats.length){ cats=raw.cats; await persistCats(); }
+    for(const c of raw.cards){ if(c && c.id && c.subject) await persistCard(c); }
+    closeSheet(); toast(raw.cards.length+' fiche(s) importée(s)');
+  }catch(err){ toast("Ce fichier n'est pas une copie du Carnet de famille."); }
+});
+
+/* ---------- Exemples ---------- */
+function loadExamples(){
+  const t=todayISO(), fam=FAMILY, [p,m,e1,e2,e3]=members.map(x=>x.id).concat([fam,fam,fam,fam,fam]);
+  const ex=[
+    {memberId:m,cat:'sante',subject:'Consultation gynécologique',lastDate:addMonths(t,-11),nextDate:addDays(t,25),remindDays:30,note:'Dr Martin — prévoir le frottis. Rappel tous les ans.'},
+    {memberId:e1,cat:'sante',subject:'Dentiste — contrôle',lastDate:addMonths(t,-6),nextDate:addDays(t,4),remindDays:7,note:'Apporter la carte Vitale.'},
+    {memberId:p,cat:'sante',subject:'Ophtalmologue',lastDate:addMonths(t,-26),nextDate:addDays(t,-6),remindDays:14,note:'Renouveler l’ordonnance de lunettes.'},
+    {memberId:fam,cat:'vehicule',subject:'Contrôle technique — Clio',lastDate:addMonths(t,-23),nextDate:addDays(t,40),remindDays:60,note:'Garage du centre, sans rendez-vous le samedi matin.'},
+    {memberId:fam,cat:'maison',subject:'Assurance habitation — renouvellement',lastDate:'',nextDate:addDays(t,72),remindDays:60,note:'Comparer les offres avant la date anniversaire.'},
+    {memberId:fam,cat:'maison',subject:'Entretien chaudière',lastDate:addMonths(t,-11),nextDate:addDays(t,18),remindDays:30,note:''},
+    {memberId:e2,cat:'activites',subject:'Certificat médical judo',lastDate:'',nextDate:addDays(t,12),remindDays:7,note:'À remettre au club.'},
+    {memberId:e3,cat:'activites',subject:'Spectacle de fin d’année',lastDate:'',nextDate:addMonths(t,8),remindDays:14,note:''}
+  ];
+  const ok=new Set(cats.map(c=>c.id)); ex.forEach(c=>{ if(!ok.has(c.cat)) c.cat=cats[0].id; });
+  (async()=>{ for(const c of ex){ await persistCard(Object.assign({id:uid(),example:true,updatedAt:new Date().toISOString()},c)); } toast('Exemples ajoutés — supprimables en bas de page'); })();
+}
+async function clearExamples(){ for(const c of Object.values(cards).filter(c=>c.example)){ await removeCard(c.id); } toast('Exemples supprimés'); }
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(msg){ let t=document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); document.body.appendChild(t);} t.textContent=msg; clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),3400); }
+
+/* ---------- Événements ---------- */
+const pcEl=document.getElementById('personChips'), ccEl=document.getElementById('catChips');
+dragScroll(pcEl); dragScroll(ccEl);
+pcEl.addEventListener('click',e=>{ const b=e.target.closest('[data-person]'); if(!b) return; filters.person=b.dataset.person; saveUI(); render(); revealPressed(pcEl); });
+ccEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cat]'); if(!b) return; filters.cat=b.dataset.cat; saveUI(); render(); revealPressed(ccEl); });
+const q=document.getElementById('q'), qc=document.getElementById('qClear');
+q.addEventListener('input',()=>{ filters.q=q.value; qc.hidden=!q.value; render(); });
+qc.addEventListener('click',()=>{ q.value=''; filters.q=''; qc.hidden=true; render(); q.focus(); });
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]'); if(o && !layer.contains(o)){ openCard(o.dataset.open); return; }
+  const a=e.target.closest('[data-act]'); if(!a) return;
+  ({new:()=>openCard(),examples:loadExamples,reset:()=>{filters={person:'all',cat:'all',q:''};q.value='';qc.hidden=true;saveUI();render();},
+    clearExamples, notif:openNotif, members:openMembers, cats:openCats})[a.dataset.act]?.();
+});
+document.getElementById('fab').addEventListener('click',()=>openCard());
+document.getElementById('btnNotif').addEventListener('click',openNotif);
+document.getElementById('btnMembers').addEventListener('click',openMembers);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden && mode!=='loading'){ render(); schedulePushSync(); } });
+
+if('serviceWorker' in navigator && !window.claude && location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+window.__carnetTest = {addDays,addMonths,diffDays,relLabel,status,buildReminders:()=>buildReminders()};
+
+render();
+initStore();
+})();
+</script>
