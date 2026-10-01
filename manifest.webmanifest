@@ -1,7 +1,7 @@
 {
   "name": "Carnet de famille",
   "short_name": "Carnet",
-  "description": "Échéances et rappels de toute la famille : santé, véhicule, maison et assurances, activités.",
+  "description": "Échéances et rappels de toute la famille : santé, véhicule, maison et entretien, activités.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",

@@ -1,6 +1,6 @@
 # Carnet de famille
 
-Application web installable (PWA) pour suivre les échéances de la famille : santé, véhicule, maison et assurances, activités. Les fiches restent sur le téléphone. Un petit service Cloudflare envoie les notifications, même quand l'app est fermée.
+Application web installable (PWA) pour suivre les échéances de la famille : santé, véhicule, maison et entretien, activités. Les fiches restent sur le téléphone. Un petit service Cloudflare envoie les notifications, même quand l'app est fermée.
 
 ## Contenu du dossier
 

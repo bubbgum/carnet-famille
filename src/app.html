@@ -250,6 +250,15 @@ img{max-width:100%}
 .addline.hist svg{color:var(--lilac)}
 .addline b{font-size:.8rem;background:rgba(255,255,255,.14);border-radius:999px;padding:1px 8px}
 .histsum{margin:0 6px;font-size:.84rem;color:var(--ink-3)}
+.mgroup{padding-bottom:4px}
+.mhead{display:flex;align-items:center;gap:10px;padding:0 2px}
+.mhead .av{width:32px;height:32px;font-size:.82rem}
+.mname{flex:1;min-width:0;font-weight:700;font-size:1.02rem;overflow-wrap:anywhere}
+.mini{height:40px;min-width:40px;padding:0 10px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:none;color:var(--ink)}
+.mini svg{width:18px;height:18px}
+.mini b{font-size:.8rem;font-weight:700}
+.mgroup .histsum{margin:-2px 2px 0 44px}
+.mgroup+.mgroup{border-top:1px solid var(--line);padding-top:14px}
 .warnbox{margin:10px 0 0;padding:13px 15px;border-radius:18px;background:var(--late-bg);border:1px solid rgba(255,122,138,.35);color:var(--ink);font-size:.94rem;display:grid;gap:10px}
 
 /* Pied de page */
@@ -360,6 +369,93 @@ button.hrow:active{transform:scale(.99)}
   background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(226,232,255,.92));box-shadow:0 12px 30px rgba(0,0,40,.45)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .empty{text-align:center;border-radius:var(--r);padding:28px 20px;margin-top:18px}
+/* ---------- Téléphone : version apaisée ---------- */
+@media (max-width:639px){
+  body{background-image:
+    radial-gradient(70% 35% at 90% 0%,rgba(120,100,230,.28),transparent 70%),
+    radial-gradient(60% 30% at 0% 20%,rgba(62,115,255,.22),transparent 70%),
+    linear-gradient(170deg,#0E1660 0%,#0B1252 60%,#120F55 100%)}
+  .main{padding-block:10px 120px}
+  .brand-s{height:38px}
+  .brand span{font-size:1.08rem}
+  .icon-btn{width:44px;height:44px}
+  .icon-btn svg{width:20px;height:20px}
+  .top-actions{gap:8px}
+  .topbar{gap:10px}
+  .search input{height:46px;font-size:.98rem}
+  .search .clear{top:5px}
+  .sync{display:none}
+  .glass{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 4px 14px rgba(4,8,60,.25)}
+  .primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 16px rgba(46,90,255,.35)}
+  .hero{margin-top:22px;gap:12px}
+  .hero h1{font-size:1.85rem;letter-spacing:-.025em}
+  .hero p{font-size:.95rem;margin-top:4px}
+  .eyebrow{font-size:.78rem}
+  .hero-actions .btn{min-height:46px;font-size:.95rem}
+  .tools{margin:16px 0 4px}
+  .chips{gap:8px}
+  .chip{height:44px;padding:0 16px 0 6px;font-size:.92rem;gap:8px}
+  .chip .av,.chip.add .plusav{width:32px;height:32px;font-size:.82rem}
+  .chip[aria-pressed="true"]{box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(10,20,90,.3)}
+  /* Tuiles : verre discret, la couleur reste seulement dans l'icône */
+  .folders{gap:10px}
+  .folder,.folder.t0,.folder.t1,.folder.t2,.folder.t3,.folder.t4,.folder.t5{min-height:72px;padding:12px 14px;gap:14px;border-radius:20px;color:var(--ink);
+    background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.12);box-shadow:none}
+  .folder::before,.folder::after{display:none}
+  .folder .ficon{width:44px;height:44px;border-radius:14px;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.5);color:#14206A}
+  .folder .ficon svg{width:22px;height:22px}
+  .folder.t0 .ficon{background:linear-gradient(160deg,#E3F2FF,#AFD8FB)}
+  .folder.t1 .ficon{background:linear-gradient(160deg,#9DB2FF,#6F86F2);color:#fff}
+  .folder.t2 .ficon{background:linear-gradient(160deg,#E2D8FF,#B9A5F5)}
+  .folder.t3 .ficon{background:linear-gradient(160deg,#FBE5F6,#DCCBF8)}
+  .folder.t4 .ficon{background:linear-gradient(160deg,#A9B6EE,#7C8BDA);color:#fff}
+  .folder.t5 .ficon{background:linear-gradient(160deg,#8FB0FF,#5E78F0);color:#fff}
+  .folder.add .ficon{background:rgba(255,255,255,.08);color:#fff;box-shadow:none}
+  .folder.add{border:1px dashed rgba(255,255,255,.28)}
+  .fname{font-size:1.02rem;font-weight:700}
+  .fmeta{font-size:.84rem;color:var(--ink-3);opacity:1}
+  .fmeta b{color:var(--ink-2)}
+  .fmeta b.late,.folder.t1 .fmeta b.late,.folder.t4 .fmeta b.late,.folder.t5 .fmeta b.late{color:var(--late)}
+  .fmeta b.soon,.folder.t1 .fmeta b.soon,.folder.t4 .fmeta b.soon,.folder.t5 .fmeta b.soon{color:var(--soon)}
+  .favs .av{width:20px;height:20px;font-size:.56rem;border-color:rgba(20,26,90,.9)}
+  .chev{width:18px;height:18px;opacity:.5}
+  /* Fiches */
+  .card{padding:14px;gap:8px 12px;border-radius:20px;background:rgba(255,255,255,.06);box-shadow:none;border-color:rgba(255,255,255,.1)}
+  .card .subj{font-size:1.02rem;font-weight:700}
+  .card .note{-webkit-line-clamp:1;font-size:.85rem}
+  .card .meta{font-size:.8rem}
+  .pill{font-size:.72rem;padding:3px 9px}
+  .datebox{width:58px;border-radius:15px;padding:8px 3px 7px;color:color-mix(in srgb,var(--c) 40%,#fff);
+    background:color-mix(in srgb,var(--c) 16%,rgba(255,255,255,.04));border:1px solid color-mix(in srgb,var(--c) 35%,transparent);box-shadow:none}
+  .datebox .d{font-size:1.45rem}
+  .datebox .m{font-size:.66rem}
+  .datebox .y{display:none}
+  .rel{padding-top:8px;font-size:.82rem}
+  .group{margin-top:18px}
+  .group h3{font-size:.74rem}
+  .list{gap:10px}
+  /* Alertes */
+  .alerts{padding:12px 14px 6px;border-radius:20px;box-shadow:none;background:rgba(255,255,255,.06)}
+  .alerts::before{opacity:.6}
+  .alerts h2{font-size:1rem}
+  .alert-row{padding:9px 0;gap:10px}
+  .alert-row .t b{font-weight:600;font-size:.95rem}
+  .alert-row .t span{font-size:.8rem}
+  .alert-row .dot{box-shadow:none;width:8px;height:8px}
+  /* Sous-dossier */
+  .subtitle h2{font-size:1.45rem}
+  .subhead .icon-btn{width:42px;height:42px}
+  .mgroup{margin-top:14px;gap:8px}
+  .mgroup h3{font-size:.96rem}
+  .mgroup h3 .av{width:26px;height:26px}
+  .addline{min-height:44px;font-size:.86rem;border-width:1px;border-color:rgba(255,255,255,.2)}
+  /* Barre d'onglets */
+  .tabbar{background:linear-gradient(180deg,rgba(40,52,150,.9),rgba(22,28,100,.92));left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom,0px));border-radius:26px;padding:5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 22px rgba(4,8,60,.4)}
+  .tab{height:52px;min-width:68px;border-radius:21px;font-size:.68rem;gap:2px}
+  .tab svg{width:21px;height:21px}
+  .tab .tc{color:var(--ink-2)}
+  .tab[aria-pressed="true"]{box-shadow:inset 0 1px 0 #fff,0 3px 10px rgba(10,20,90,.3)}
+}
 </style>
 
 <div class="app">
@@ -452,7 +548,7 @@ const BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 const DEFAULT_CATS = [
   {id:'sante',label:'Santé',color:'#FF7FA8',icon:'sante',subs:[{id:'s_dentiste',label:'Dentiste'},{id:'s_medecin',label:'Médecin traitant'},{id:'s_gyneco',label:'Gynécologue'},{id:'s_ophtalmo',label:'Ophtalmologue'},{id:'s_pediatre',label:'Pédiatre'},{id:'s_dermato',label:'Dermatologue'},{id:'s_vaccins',label:'Vaccins'}],sugg:['Consultation gynécologique','Médecin traitant','Dentiste','Ophtalmologue','Pédiatre','Vaccin (rappel)','Dermatologue','Prise de sang']},
   {id:'vehicule',label:'Véhicule',color:'#4FC3FF',icon:'vehicule',subs:[{id:'v_entretien',label:'Entretien'},{id:'v_ct',label:'Contrôle technique'},{id:'v_pneus',label:'Pneus'}],sugg:['Contrôle technique','Révision','Vidange','Pneus hiver','Assurance auto','Carte grise']},
-  {id:'maison',label:'Maison et assurances',color:'#FFB547',icon:'maison',subs:[],sugg:['Assurance habitation','Mutuelle','Entretien chaudière','Ramonage','Taxe foncière','Contrat énergie','Box internet']},
+  {id:'maison',label:'Maison et entretien',color:'#FFB547',icon:'maison',subs:[],sugg:['Assurance habitation','Mutuelle','Entretien chaudière','Ramonage','Taxe foncière','Contrat énergie','Box internet']},
   {id:'activites',label:'Activités',color:'#5FE0B0',icon:'activites',subs:[],sugg:['Inscription','Certificat médical sport','Réunion parents-profs','Spectacle','Stage vacances','Anniversaire']}
 ];
 const CAT_COLORS = ['#FF7FA8','#4FC3FF','#FFB547','#5FE0B0','#A98BFF','#E58BFF','#9BE36A','#FF9F7A','#7FA6FF','#C8D0FF'];
@@ -558,7 +654,8 @@ const catVars = id => { const c=esc(freshColor(cat(id).color)); return `--c:${c}
 /* ---------- Stockage ---------- */
 const queues = {};
 function queued(key, fn){ const p=(queues[key]||Promise.resolve()).then(fn, fn); queues[key]=p.catch(()=>{}); return p; }
-function localLoad(){ const raw=lsGet(LS_KEY,null); if(raw){ if(raw.members&&raw.members.length){members=raw.members;membersSaved=true;} if(raw.cats&&raw.cats.length){cats=raw.cats;catsSaved=true;} cards=raw.cards||{}; hist=raw.hist||{}; } }
+const renameOld = list => list.map(c => (c.id==='maison' && c.label==='Maison et assurances') ? Object.assign({},c,{label:'Maison et entretien'}) : c);
+function localLoad(){ const raw=lsGet(LS_KEY,null); if(raw){ if(raw.members&&raw.members.length){members=raw.members;membersSaved=true;} if(raw.cats&&raw.cats.length){cats=renameOld(raw.cats);catsSaved=true;} cards=raw.cards||{}; hist=raw.hist||{}; } }
 function localSave(){ if(!lsSet(LS_KEY,{members,cats,cards,hist})) toast("Impossible d'enregistrer sur ce téléphone."); }
 
 async function persistCard(card){
@@ -616,7 +713,7 @@ async function initStore(){
       const next={}, nextH={}; let mem=null;
       snap.docs.forEach(d=>{ const v=d.data(); if(!v) return;
         if(d.id==='_membres') mem=v.list;
-        else if(d.id==='_rubriques'){ if(v.list && v.list.length){ cats=v.list; catsSaved=true; } }
+        else if(d.id==='_rubriques'){ if(v.list && v.list.length){ cats=renameOld(v.list); catsSaved=true; } }
         else if(v.kind==='fiche'){ const c=Object.assign({},v); delete c.kind; c.id=d.id; next[d.id]=c; }
         else if(v.kind==='hist'){ const h=Object.assign({},v); delete h.kind; h.id=d.id; nextH[d.id]=h; } });
       cards=next; hist=nextH; if(mem && mem.length){ members=mem; membersSaved=true; }
@@ -779,11 +876,12 @@ function subHTML(k, subId, today){
   const sorted = l => l.sort((a,b)=>(a.nextDate||'9999').localeCompare(b.nextDate||'9999'));
   const rows = people.map(p=>{
     const l=sorted(Object.values(cards).filter(c=>match(c) && c.memberId===p.id));
-    return `<section class="mgroup"><h3>${avatar(p)}<span>${esc(p.name)}</span><span class="n">${l.length||''}</span></h3>
-      ${l.length?`<div class="list">${l.map(c=>cardHTML(c,today)).join('')}</div>`:''}
-      ${(()=>{ const h=histFor(p.id,k.id,sb.id==='_none'?'':sb.id); return `<div class="rowbtns"><button class="addline" data-add="${esc(p.id)}">${PLUS}${l.length?'Autre fiche':'Nouvelle fiche'}</button>
-        <button class="addline hist" data-hist="${esc(p.id)}">${CLOCK}Historique${h.length?` <b>${h.length}</b>`:''}</button></div>
-        ${h.length?`<p class="histsum">Dernier rendez-vous : ${fmt(h[0].date)}</p>`:''}`; })()}</section>`;
+    const h=histFor(p.id,k.id,sb.id==='_none'?'':sb.id);
+    return `<section class="mgroup"><div class="mhead">${avatar(p)}<span class="mname">${esc(p.name)}</span>
+        <button class="mini glass" data-hist="${esc(p.id)}" aria-label="Historique de ${esc(p.name)}">${CLOCK}${h.length?`<b>${h.length}</b>`:''}</button>
+        <button class="mini primary" data-add="${esc(p.id)}" aria-label="Nouvelle fiche pour ${esc(p.name)}">${PLUS}</button></div>
+      ${h.length?`<p class="histsum">Dernier rendez-vous : ${fmt(h[0].date)}</p>`:''}
+      ${l.length?`<div class="list">${l.map(c=>cardHTML(c,today)).join('')}</div>`:''}</section>`;
   }).join('');
   const tools = sb.id==='_none' ? '' : `<button class="icon-btn glass" data-act="renameSub" aria-label="Renommer le sous-dossier">${PEN}</button><button class="icon-btn glass danger-ic" data-act="deleteSub" aria-label="Supprimer le sous-dossier">${TRASH}</button>`;
   return `<section class="subview" style="${catVars(k.id)}">
