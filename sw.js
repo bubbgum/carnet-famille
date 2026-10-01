@@ -1,5 +1,5 @@
 /* Carnet de famille — service worker : fonctionnement hors ligne + notifications */
-const VERSION = 'carnet-v3';
+const VERSION = 'carnet-v4';
 const CORE = ['./', './index.html', './config.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -17,7 +17,7 @@ self.addEventListener('fetch', (e) => {
   if (!sameOrigin && !isFont) return; // le service d'envoi n'est jamais mis en cache
   if (req.mode === 'navigate' || (sameOrigin && /\/(index\.html|config\.js)?$/.test(url.pathname))) {
     // Réseau d'abord : les mises à jour publiées sur GitHub arrivent tout de suite
-    e.respondWith(fetch(req).then((res) => { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); return res; })
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then((res) => { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); return res; })
       .catch(() => caches.match(req).then((r) => r || caches.match('./index.html'))));
     return;
   }

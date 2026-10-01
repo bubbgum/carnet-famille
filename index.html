@@ -146,6 +146,50 @@ button{cursor:pointer}
 .datebox .m{font-family:var(--f-mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
 .datebox .y{font-family:var(--f-mono);font-size:.62rem;opacity:.75}
 .datebox.none{background:rgba(255,255,255,.04);color:var(--ink-3);border-color:var(--line)}
+.subtag{opacity:.85;text-transform:none;letter-spacing:.02em}
+.none{color:var(--ink-3);text-align:center;margin:22px 0 0;font-size:.95rem}
+.folders-wrap{margin-top:18px}
+.fhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 10px}
+.ftitle{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:1.45rem;color:var(--cink)}
+.ftitle svg{width:22px;height:22px}
+.fwho{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.folders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.folder{display:grid;align-content:start;gap:6px;text-align:left;min-height:118px;padding:13px;border-radius:18px;color:var(--ink);
+  background:linear-gradient(165deg,color-mix(in srgb,var(--c) 15%,rgba(38,52,45,.88)),rgba(18,26,22,.92));border:1px solid color-mix(in srgb,var(--c) 30%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.folder:active{transform:scale(.98)}
+.ficon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 85%,#fff 10%),color-mix(in srgb,var(--c) 70%,#000 20%));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 10px color-mix(in srgb,var(--c) 30%,transparent)}
+.ficon svg{width:19px;height:19px}
+.fname{font-weight:700;font-size:1.02rem;line-height:1.2;overflow-wrap:anywhere}
+.fmeta{font-size:.82rem;color:var(--ink-3)}
+.fmeta b{font-weight:700;color:var(--ink-2)} .fmeta b.late{color:var(--late)} .fmeta b.soon{color:var(--soon)}
+.favs{display:flex;margin-top:2px}
+.favs .av{width:22px;height:22px;font-size:.62rem;margin-right:-6px;border:2px solid rgba(18,26,22,.9)}
+.folder.loose{border-style:dashed}
+.folder.add{background:rgba(255,255,255,.03);border:1.5px dashed color-mix(in srgb,var(--green-hi) 45%,transparent);box-shadow:none;color:var(--green-hi)}
+.folder.add .ficon{background:rgba(147,214,177,.14);color:var(--green-hi);box-shadow:none}
+.folder.add .fmeta{color:var(--ink-3)}
+.subview{margin-top:16px}
+.subhead{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.subtitle{flex:1;min-width:0}
+.subtitle .eyebrow{color:var(--cink);margin:0}
+.subtitle h2{font-family:var(--f-display);font-weight:900;text-transform:uppercase;letter-spacing:.02em;font-size:1.9rem;line-height:.95;margin:0;overflow-wrap:anywhere}
+.danger-ic{color:var(--late)}
+.mgroup{margin-top:16px;display:grid;gap:9px}
+.mgroup h3{display:flex;align-items:center;gap:9px;margin:0 2px;font-size:1rem;font-weight:700}
+.mgroup h3 .av{width:26px;height:26px;font-size:.72rem}
+.mgroup h3 .n{margin-left:auto;font-family:var(--f-mono);font-size:.78rem;color:var(--ink-3)}
+.addline{display:flex;align-items:center;justify-content:center;gap:7px;min-height:46px;border-radius:14px;border:1.5px dashed var(--line-2);background:rgba(255,255,255,.025);color:var(--ink-2);font-weight:600;font-size:.92rem}
+.addline svg{width:16px;height:16px;color:var(--green-hi)}
+.warnbox{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:var(--late-bg);border:1px solid rgba(255,123,102,.3);color:var(--ink);font-size:.92rem;display:grid;gap:10px}
+.subpick{display:flex;flex-wrap:wrap;gap:7px}
+.subpick button{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 12px;border-radius:12px;font-weight:600;font-size:.9rem;color:var(--ink-2);background:rgba(255,255,255,.04);border:1px solid var(--line-2)}
+.subpick button svg{width:15px;height:15px;opacity:.8}
+.subpick button[aria-pressed="true"]{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 60%,transparent),color-mix(in srgb,var(--c) 35%,rgba(0,0,0,.4)));border-color:var(--c);color:#fff}
+.subpick button.plus{border-style:dashed;color:var(--green-hi)}
+.newsub{display:flex;gap:8px;margin-top:4px}
+.newsub input{flex:1;min-width:0;width:0}
+.newsub .btn{min-height:50px}
 .rel{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px dashed var(--line-2);padding-top:9px;font-size:.84rem;color:var(--ink-2)}
 .rel b{font-weight:700;color:var(--ink)}
 .rel .late{color:var(--late)} .rel .soon{color:var(--soon)}
@@ -301,10 +345,10 @@ const ICONS = {
 const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 const BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
 const DEFAULT_CATS = [
-  {id:'sante',label:'Santé',color:'#DC735F',icon:'sante',sugg:['Consultation gynécologique','Médecin traitant','Dentiste','Ophtalmologue','Pédiatre','Vaccin (rappel)','Dermatologue','Prise de sang']},
-  {id:'vehicule',label:'Véhicule',color:'#7FA8CC',icon:'vehicule',sugg:['Contrôle technique','Révision','Vidange','Pneus hiver','Assurance auto','Carte grise']},
-  {id:'maison',label:'Maison et assurances',color:'#D8A64E',icon:'maison',sugg:['Assurance habitation','Mutuelle','Entretien chaudière','Ramonage','Taxe foncière','Contrat énergie','Box internet']},
-  {id:'activites',label:'Activités',color:'#57C2AA',icon:'activites',sugg:['Inscription','Certificat médical sport','Réunion parents-profs','Spectacle','Stage vacances','Anniversaire']}
+  {id:'sante',label:'Santé',color:'#DC735F',icon:'sante',subs:[{id:'s_dentiste',label:'Dentiste'},{id:'s_medecin',label:'Médecin traitant'},{id:'s_gyneco',label:'Gynécologue'},{id:'s_ophtalmo',label:'Ophtalmologue'},{id:'s_pediatre',label:'Pédiatre'},{id:'s_dermato',label:'Dermatologue'},{id:'s_vaccins',label:'Vaccins'}],sugg:['Consultation gynécologique','Médecin traitant','Dentiste','Ophtalmologue','Pédiatre','Vaccin (rappel)','Dermatologue','Prise de sang']},
+  {id:'vehicule',label:'Véhicule',color:'#7FA8CC',icon:'vehicule',subs:[{id:'v_entretien',label:'Entretien'},{id:'v_ct',label:'Contrôle technique'},{id:'v_pneus',label:'Pneus'}],sugg:['Contrôle technique','Révision','Vidange','Pneus hiver','Assurance auto','Carte grise']},
+  {id:'maison',label:'Maison et assurances',color:'#D8A64E',icon:'maison',subs:[],sugg:['Assurance habitation','Mutuelle','Entretien chaudière','Ramonage','Taxe foncière','Contrat énergie','Box internet']},
+  {id:'activites',label:'Activités',color:'#57C2AA',icon:'activites',subs:[],sugg:['Inscription','Certificat médical sport','Réunion parents-profs','Spectacle','Stage vacances','Anniversaire']}
 ];
 const CAT_COLORS = ['#DC735F','#7FA8CC','#D8A64E','#57C2AA','#A98BD6','#E08BB0','#9DBF5A','#C98A6B','#6FB3D9','#B8B8A8'];
 const ICON_NAMES = ['sante','vehicule','maison','activites','ecole','animal','argent','travail','voyage','sport','papiers','outil','etoile'];
@@ -312,6 +356,27 @@ let cats = DEFAULT_CATS.map(c=>Object.assign({},c));
 let catsSaved = false;
 const cat = id => cats.find(c=>c.id===id) || {id, label:'Rubrique supprimée', color:'#8A978F', icon:'etoile', sugg:[]};
 const icon = c => ICONS[c.icon] || ICONS.etoile;
+const FOLDER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/></svg>';
+const PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></svg>';
+const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/></svg>';
+const BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+/* Sous-dossiers : communs à tous les membres de la famille */
+const subsOf = k => Array.isArray(k.subs) ? k.subs : ((DEFAULT_CATS.find(d=>d.id===k.id)||{}).subs || []).map(x=>Object.assign({},x));
+const stem = l => norm(l).replace(/[^a-z ]/g,'').split(' ').filter(Boolean)[0]?.slice(0,6) || '';
+function subOf(c){
+  const list = subsOf(cat(c.cat));
+  if(c.sub!==undefined) return list.find(x=>x.id===c.sub) || null;
+  const t = norm(c.subject);   // anciennes fiches : rangement deviné d'après le sujet
+  return list.find(x=>{ const st=stem(x.label); return st.length>=4 && t.includes(st); }) || null;
+}
+async function addSub(catId, label){
+  const k = cats.find(c=>c.id===catId); if(!k) return null;
+  const clean = label.trim().slice(0,40); if(!clean) return null;
+  const list = subsOf(k);
+  const dup = list.find(x=>norm(x.label)===norm(clean)); if(dup) return dup;
+  const sub = {id:'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), label:clean};
+  k.subs = list.concat([sub]); await persistCats(); return sub;
+}
 const MEMBER_COLORS = ['#3F8F68','#C4604E','#5F8DB8','#C4913F','#8A6BB8','#3E9C93','#A7563A','#6E7F76'];
 const DEFAULT_MEMBERS = [
   {id:'m1',name:'Père',color:'#5F8DB8'},
@@ -360,7 +425,7 @@ function status(card, today){
 let members = DEFAULT_MEMBERS.slice();
 let membersSaved = false;
 let cards = {};
-let filters = {person:'all', cat:'all', q:''};
+let filters = {person:'all', cat:'all', q:'', sub:null};
 let mode = 'loading';     // loading | cloud (aperçu Claude) | local (app installée)
 let col = null;
 const LS_KEY = 'carnet-famille-v1', LS_UI = 'carnet-famille-ui', LS_SET = 'carnet-famille-settings';
@@ -482,7 +547,7 @@ function dragScroll(el){
 window.addEventListener('resize',()=>{ updateFades(document.getElementById('personChips')); updateFades(document.getElementById('catChips')); });
 function remindText(c){ if(!hasRemind(c)) return 'Pas de rappel'; const o=REMIND_OPTS.find(o=>o[0]===Number(c.remindDays)); return o?o[1]:c.remindDays+' j avant'; }
 function cardHTML(c, today){
-  const m=member(c.memberId), k=cat(c.cat), st=status(c,today);
+  const m=member(c.memberId), k=cat(c.cat), st=status(c,today), sb=subOf(c);
   const d=c.nextDate?parse(c.nextDate):null;
   const box = d ? `<div class="datebox"><span class="d">${d.getDate()}</span><span class="m">${MONTHS[d.getMonth()].replace('.','')}</span><span class="y">${d.getFullYear()}</span></div>`
                 : `<div class="datebox none"><span class="m">Sans<br>date</span></div>`;
@@ -493,7 +558,7 @@ function cardHTML(c, today){
   }
   return `<button class="card" data-open="${esc(c.id)}" style="${catVars(k.id)}">
     <div class="main">
-      <span class="pill">${icon(k)}${esc(k.label)}${c.example?' <span class="ex">Exemple</span>':''}</span>
+      <span class="pill">${icon(k)}${esc(k.label)}${sb?` <span class="subtag">› ${esc(sb.label)}</span>`:''}${c.example?' <span class="ex">Exemple</span>':''}</span>
       <span class="subj">${esc(c.subject||'Sans titre')}</span>
       <span class="who">${avatar(m)}${esc(m.name)}</span>
       ${c.lastDate?`<span class="meta">Dernière fois : ${fmt(c.lastDate)}</span>`:''}
@@ -511,14 +576,14 @@ function render(){
   const content=document.getElementById('content');
   const all=Object.values(cards);
   if(mode==='loading'){ content.innerHTML='<div class="empty"><p>Chargement de vos fiches…</p></div>'; return; }
-  if(!all.length){
-    content.innerHTML=`<div class="empty"><h2>Aucune fiche</h2>
-      <p>Ajoutez une première échéance : un rendez-vous médical, un contrôle technique, une assurance à renouveler…</p>
-      <div class="row"><button class="btn glass-green" data-act="new">Ajouter une fiche</button><button class="btn glass" data-act="examples">Voir avec des exemples</button></div></div>`;
+  if(filters.cat!=='all' && !filters.q.trim()){
+    const k=cat(filters.cat);
+    content.innerHTML = filters.sub ? subHTML(k, filters.sub, today) : foldersHTML(k, today);
     renderFoot(); return;
   }
+  if(!all.length){ content.innerHTML=''; renderFoot(); return; }
   const list=filtered();
-  if(!list.length){ content.innerHTML=`<div class="empty"><h2>Aucun résultat</h2><p>Aucune fiche ne correspond à la recherche ou aux filtres.</p><div class="row"><button class="btn glass" data-act="reset">Tout afficher</button></div></div>`; renderFoot(); return; }
+  if(!list.length){ content.innerHTML=`<p class="none">${filters.q.trim()?`Aucune fiche ne correspond à « ${esc(filters.q.trim())} ».`:'Aucune fiche pour cette sélection.'}</p>`; renderFoot(); return; }
   const groups=[['late','En retard',[]],['w','Cette semaine',[]],['m','Dans le mois',[]],['q','Dans les 3 mois',[]],['l','Plus tard',[]],['n','Sans échéance',[]]];
   list.forEach(c=>{ if(!c.nextDate){groups[5][2].push(c);return;} const n=diffDays(today,c.nextDate);
     groups[n<0?0 : n<=7?1 : n<=31?2 : n<=92?3 : 4][2].push(c); });
@@ -526,6 +591,87 @@ function render(){
   content.innerHTML = groups.filter(g=>g[2].length).map(g=>`<section class="group ${g[0]==='late'?'late':''}"><h3><span>${g[1]}</span><span class="n">${g[2].length}</span></h3><div class="list">${g[2].map(c=>cardHTML(c,today)).join('')}</div></section>`).join('');
   renderFoot();
 }
+/* Grille des sous-dossiers d'une rubrique */
+const personMatch = c => filters.person==='all' || c.memberId===filters.person;
+function nextOf(list, today){
+  const dated=list.filter(c=>c.nextDate).sort((a,b)=>a.nextDate.localeCompare(b.nextDate));
+  return dated.length ? {c:dated[0], st:status(dated[0],today)} : null;
+}
+function folderMeta(list, today){
+  if(!list.length) return '<span class="fmeta">Aucune fiche</span>';
+  const nx=nextOf(list,today);
+  let when='';
+  if(nx){ const n=nx.st.n; const cls=nx.st.kind==='late'?'late':(nx.st.kind==='remind'?'soon':'');
+    when = ` · <b class="${cls}">${nx.st.kind==='late'?'en retard':(n===0?"aujourd'hui":n===1?'demain':shortDate(nx.c.nextDate))}</b>`; }
+  return `<span class="fmeta">${list.length} fiche${list.length>1?'s':''}${when}</span>`;
+}
+function folderAvatars(list){
+  if(filters.person!=='all') return '';
+  const ids=[...new Set(list.map(c=>c.memberId))].slice(0,5);
+  return ids.length ? `<span class="favs">${ids.map(id=>avatar(member(id))).join('')}</span>` : '';
+}
+function foldersHTML(k, today){
+  const inCat=Object.values(cards).filter(c=>c.cat===k.id && personMatch(c));
+  const subs=subsOf(k);
+  const tiles=subs.map(sb=>{ const l=inCat.filter(c=>subOf(c)?.id===sb.id);
+    return `<button class="folder" data-sub="${esc(sb.id)}"><span class="ficon">${FOLDER}</span><span class="fname">${esc(sb.label)}</span>${folderMeta(l,today)}${folderAvatars(l)}</button>`; });
+  const loose=inCat.filter(c=>!subOf(c));
+  if(loose.length) tiles.push(`<button class="folder loose" data-sub="_none"><span class="ficon">${icon(k)}</span><span class="fname">Autres ${esc(k.label.toLowerCase())}</span>${folderMeta(loose,today)}${folderAvatars(loose)}</button>`);
+  tiles.push(`<button class="folder add" data-act="newSub"><span class="ficon">${PLUS}</span><span class="fname">Nouveau sous-dossier</span><span class="fmeta">Pour toute la famille</span></button>`);
+  const who = filters.person==='all' ? 'Toute la famille' : member(filters.person).name;
+  return `<section class="folders-wrap" style="${catVars(k.id)}">
+    <div class="fhead"><span class="ftitle">${icon(k)}${esc(k.label)}</span><span class="fwho">${esc(who)}</span></div>
+    <div class="folders">${tiles.join('')}</div></section>`;
+}
+/* Contenu d'un sous-dossier : une ligne par membre */
+function subHTML(k, subId, today){
+  const sb = subId==='_none' ? {id:'_none',label:'Autres '+k.label.toLowerCase()} : subsOf(k).find(x=>x.id===subId);
+  if(!sb){ filters.sub=null; return foldersHTML(k,today); }
+  const match = c => c.cat===k.id && (sb.id==='_none' ? !subOf(c) : subOf(c)?.id===sb.id);
+  const people = filters.person==='all' ? members.concat([member(FAMILY)]) : [member(filters.person)];
+  const sorted = l => l.sort((a,b)=>(a.nextDate||'9999').localeCompare(b.nextDate||'9999'));
+  const rows = people.map(p=>{
+    const l=sorted(Object.values(cards).filter(c=>match(c) && c.memberId===p.id));
+    return `<section class="mgroup"><h3>${avatar(p)}<span>${esc(p.name)}</span><span class="n">${l.length||''}</span></h3>
+      ${l.length?`<div class="list">${l.map(c=>cardHTML(c,today)).join('')}</div>`:''}
+      <button class="addline" data-add="${esc(p.id)}">${PLUS}Ajouter${l.length?' une autre fiche':''} pour ${esc(p.name)}</button></section>`;
+  }).join('');
+  const tools = sb.id==='_none' ? '' : `<button class="icon-btn glass" data-act="renameSub" aria-label="Renommer le sous-dossier">${PEN}</button><button class="icon-btn glass danger-ic" data-act="deleteSub" aria-label="Supprimer le sous-dossier">${TRASH}</button>`;
+  return `<section class="subview" style="${catVars(k.id)}">
+    <div class="subhead"><button class="icon-btn glass" data-act="back" aria-label="Retour aux sous-dossiers">${BACK}</button>
+      <div class="subtitle"><span class="eyebrow">${esc(k.label)}</span><h2>${esc(sb.label)}</h2></div>${tools}</div>
+    <div id="subConfirm"></div>${rows}</section>`;
+}
+function openSubName(title, initial, onOk){
+  openSheet(`${head(title)}
+    <div class="sheet-body">
+      <div class="field"><label for="fSubName">Nom du sous-dossier</label><input id="fSubName" maxlength="40" value="${esc(initial)}" placeholder="Ex. Kinésithérapeute"></div>
+      <p class="hint" style="margin:0">Le sous-dossier est disponible pour ${esc(members.map(m=>m.name).join(', '))} et toute la famille.</p>
+    </div>
+    <div class="sheet-foot"><button class="btn glass" data-close type="button">Annuler</button><button class="btn glass-green" id="bSubOk" type="button">Enregistrer</button></div>`, sheet=>{
+    const i=sheet.querySelector('#fSubName'); setTimeout(()=>i.focus(),50);
+    const ok=async()=>{ const v=i.value.trim(); if(!v){ i.focus(); toast('Indiquez un nom'); return; } await onOk(v); };
+    sheet.querySelector('#bSubOk').addEventListener('click',ok);
+    i.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); ok(); } });
+  });
+}
+function newSub(){
+  const k=cat(filters.cat);
+  openSubName('Nouveau sous-dossier · '+k.label,'',async v=>{ const sb=await addSub(k.id,v); closeSheet(); if(sb){ filters.sub=sb.id; render(); toast('Sous-dossier « '+sb.label+' » créé'); } });
+}
+function renameSub(){
+  const k=cats.find(c=>c.id===filters.cat); if(!k) return; const list=subsOf(k); const sb=list.find(x=>x.id===filters.sub); if(!sb) return;
+  openSubName('Renommer le sous-dossier', sb.label, async v=>{ k.subs=list.map(x=>x.id===sb.id?{id:x.id,label:v.slice(0,40)}:x); await persistCats(); closeSheet(); toast('Sous-dossier renommé'); });
+}
+async function deleteSub(){
+  const k=cats.find(c=>c.id===filters.cat); if(!k) return; const list=subsOf(k); const sb=list.find(x=>x.id===filters.sub); if(!sb) return;
+  const used=Object.values(cards).filter(c=>c.cat===k.id && subOf(c)?.id===sb.id).length;
+  const box=document.getElementById('subConfirm');
+  if(used){ box.innerHTML=`<p class="warnbox">Ce sous-dossier contient ${used} fiche(s). Supprimez-les ou changez leur sous-dossier avant de le supprimer.</p>`; return; }
+  if(!box.dataset.armed){ box.dataset.armed='1'; box.innerHTML=`<div class="warnbox">Supprimer « ${esc(sb.label)} » pour toute la famille ?<div class="row-actions"><button class="btn glass danger armed" data-act="deleteSub">Supprimer</button><button class="btn glass" data-act="cancelDel">Annuler</button></div></div>`; return; }
+  k.subs=list.filter(x=>x.id!==sb.id); filters.sub=null; await persistCats(); toast('Sous-dossier supprimé');
+}
+
 function renderAlerts(today){
   const el=document.getElementById('alerts'), items=alertItems(today);
   try{ if(mode==='local' && navigator.setAppBadge){ items.length ? navigator.setAppBadge(items.length) : navigator.clearAppBadge(); } }catch(e){}
@@ -561,15 +707,18 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape' && layer.innerHTML)
 const head = t => `<div class="sheet-head"><h2>${t}</h2><button class="icon-btn glass" data-close aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
 
 /* Formulaire fiche */
-function openCard(id){
+function openCard(id, preset){
   const isNew=!id || !cards[id];
-  const f = isNew ? {id:uid(), memberId: filters.person!=='all'?filters.person:FAMILY, cat: filters.cat!=='all'?filters.cat:cats[0].id, subject:'', lastDate:'', nextDate:'', note:'', remindDays:14} : Object.assign({},cards[id]);
+  const f = isNew ? Object.assign({id:uid(), memberId: filters.person!=='all'?filters.person:FAMILY, cat: filters.cat!=='all'?filters.cat:cats[0].id, sub:(filters.sub&&filters.sub!=='_none')?filters.sub:'', subject:'', lastDate:'', nextDate:'', note:'', remindDays:14}, preset||{}) : Object.assign({},cards[id]);
+  if(!isNew) f.sub = subOf(f)?.id || '';
   const remindSel = REMIND_OPTS.map(([v,l])=>`<option value="${v===null?'':v}" ${String(f.remindDays??'')===String(v??'')?'selected':''}>${l}</option>`).join('');
   openSheet(`${head(isNew?'Nouvelle fiche':'Modifier la fiche')}
   <form class="sheet-body" id="cardForm" novalidate>
     <div class="field"><span class="lab">Personne concernée</span><div class="pick" id="pPerson"></div></div>
     <div class="field"><span class="lab">Rubrique</span><div class="catpick" id="pCat"></div></div>
-    <div class="field"><label for="fSubject">Sujet</label><input id="fSubject" required maxlength="120" value="${esc(f.subject)}" placeholder="Ex. Consultation gynécologique"><div class="sugg" id="sugg"></div></div>
+    <div class="field"><span class="lab">Sous-dossier</span><div class="subpick" id="pSub"></div>
+      <div class="newsub" id="newSubRow" hidden><label class="sr" for="fNewSub">Nom du nouveau sous-dossier</label><input id="fNewSub" maxlength="40" placeholder="Nom du sous-dossier"><button type="button" class="btn glass-green" id="bNewSubOk">Créer</button></div></div>
+    <div class="field"><label for="fSubject">Sujet</label><input id="fSubject" maxlength="120" value="${esc(f.subject)}" placeholder="Ex. Contrôle annuel"><span class="hint" id="subjHint"></span></div>
     <div class="two">
       <div class="field"><label for="fLast">Dernière date</label><input id="fLast" type="date" value="${esc(f.lastDate)}"><span class="hint">Facultatif</span></div>
       <div class="field"><label for="fNext">Prochaine échéance</label><input id="fNext" type="date" value="${esc(f.nextDate)}"><span class="hint">Date recommandée ou limite</span></div>
@@ -583,18 +732,26 @@ function openCard(id){
   </form>
   <div class="sheet-foot"><button class="btn glass" data-close type="button">Annuler</button><button class="btn glass-green" id="bSave" type="button">Enregistrer</button></div>`, sheet=>{
     const $=s=>sheet.querySelector(s);
-    const pP=$('#pPerson'), pC=$('#pCat'), sug=$('#sugg');
+    const pP=$('#pPerson'), pC=$('#pCat'), pS=$('#pSub');
     const drawPerson=()=>{ pP.innerHTML=[{id:FAMILY}].concat(members).map(m=>{ const mm=member(m.id); return `<button type="button" class="glass" data-v="${esc(mm.id)}" aria-pressed="${f.memberId===mm.id}">${avatar(mm)}${esc(mm.name)}</button>`; }).join(''); };
-    const drawCat=()=>{ pC.innerHTML=cats.map(c=>`<button type="button" style="${catVars(c.id)}" data-v="${esc(c.id)}" aria-pressed="${f.cat===c.id}">${icon(c)}${esc(c.label)}</button>`).join('');
-      sug.innerHTML=(cat(f.cat).sugg||[]).map(s=>`<button type="button">${esc(s)}</button>`).join(''); };
+    const drawSub=()=>{ const list=subsOf(cat(f.cat)); pS.setAttribute('style',catVars(f.cat));
+      pS.innerHTML=`<button type="button" data-v="" aria-pressed="${!f.sub}">Aucun</button>`+list.map(x=>`<button type="button" data-v="${esc(x.id)}" aria-pressed="${f.sub===x.id}">${FOLDER}${esc(x.label)}</button>`).join('')+`<button type="button" class="plus" data-new="1">${PLUS}Nouveau</button>`;
+      const sb=list.find(x=>x.id===f.sub); $('#subjHint').textContent = sb ? `Facultatif : « ${sb.label} » sera utilisé si vous laissez vide.` : ''; $('#fSubject').placeholder = sb ? sb.label : 'Ex. Contrôle annuel'; };
+    const drawCat=()=>{ pC.innerHTML=cats.map(c=>`<button type="button" style="${catVars(c.id)}" data-v="${esc(c.id)}" aria-pressed="${f.cat===c.id}">${icon(c)}${esc(c.label)}</button>`).join(''); drawSub(); };
     const drawHint=()=>{ const r=$('#fRemind').value, n=$('#fNext').value, h=$('#remindHint');
       if(r===''){ h.textContent='Aucune notification pour cette fiche.'; return; }
       const when = n ? (Number(r)>0 ? `le ${longDate(addDays(n,-Number(r)))} puis le jour J` : `le ${longDate(n)}`) : 'dès que la prochaine échéance sera indiquée';
       h.textContent = `Notification à ${settings.hour} h ${when}. La fiche remonte aussi dans « À ne pas oublier ».`; };
     drawPerson(); drawCat(); drawHint();
     pP.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.memberId=b.dataset.v; drawPerson(); });
-    pC.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.cat=b.dataset.v; drawCat(); });
-    sug.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; $('#fSubject').value=b.textContent; });
+    pC.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(f.cat!==b.dataset.v){ f.cat=b.dataset.v; f.sub=''; } drawCat(); });
+    pS.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
+      if(b.dataset.new){ const row=$('#newSubRow'); row.hidden=!row.hidden; if(!row.hidden) $('#fNewSub').focus(); return; }
+      f.sub=b.dataset.v; drawSub(); });
+    const createSub=async()=>{ const v=$('#fNewSub').value.trim(); if(!v){ $('#fNewSub').focus(); return; }
+      const sb=await addSub(f.cat,v); if(sb){ f.sub=sb.id; $('#fNewSub').value=''; $('#newSubRow').hidden=true; drawSub(); toast('Sous-dossier « '+sb.label+' » créé pour toute la famille'); } };
+    $('#bNewSubOk').addEventListener('click',createSub);
+    $('#fNewSub').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); createSub(); } });
     $('#quickNext').addEventListener('click',e=>{ const b=e.target.closest('[data-plus]'); if(!b) return;
       if(!$('#fLast').value) $('#fLast').value=todayISO();
       $('#fNext').value=addMonths($('#fLast').value, Number(b.dataset.plus)); drawHint(); });
@@ -605,10 +762,11 @@ function openCard(id){
     bDel && bDel.addEventListener('click',()=>{ if(!bDel.classList.contains('armed')){ bDel.classList.add('armed'); bDel.textContent='Confirmer la suppression'; return; } removeCard(f.id); closeSheet(); toast('Fiche supprimée'); });
     $('#cardForm').addEventListener('submit',e=>e.preventDefault());
     $('#bSave').addEventListener('click',()=>{
-      const subject=$('#fSubject').value.trim();
-      if(!subject){ $('#fSubject').focus(); toast('Indiquez un sujet'); return; }
+      const sbObj=subsOf(cat(f.cat)).find(x=>x.id===f.sub);
+      const subject=$('#fSubject').value.trim() || (sbObj?sbObj.label:'');
+      if(!subject){ $('#fSubject').focus(); toast('Indiquez un sujet ou choisissez un sous-dossier'); return; }
       const r=$('#fRemind').value;
-      const out={id:f.id,memberId:f.memberId,cat:f.cat,subject,lastDate:$('#fLast').value||'',nextDate:$('#fNext').value||'',note:$('#fNote').value.trim(),remindDays:r===''?null:Number(r),updatedAt:new Date().toISOString()};
+      const out={id:f.id,memberId:f.memberId,cat:f.cat,sub:sbObj?sbObj.id:'',subject,lastDate:$('#fLast').value||'',nextDate:$('#fNext').value||'',note:$('#fNote').value.trim(),remindDays:r===''?null:Number(r),updatedAt:new Date().toISOString()};
       if(f.example) out.example=true;
       persistCard(out); closeSheet(); toast(isNew?'Fiche ajoutée':'Fiche enregistrée');
     });
@@ -801,12 +959,12 @@ function openCats(){
     });
     sheet.querySelector('#bAddCat').addEventListener('click',()=>{
       const usedCols=new Set(draft.map(c=>c.color)); const col=CAT_COLORS.find(c=>!usedCols.has(c))||CAT_COLORS[draft.length%CAT_COLORS.length];
-      draft.push({id:'r'+Date.now().toString(36),label:'',color:col,icon:'etoile',sugg:[]}); open=draft.length-1; draw();
+      draft.push({id:'r'+Date.now().toString(36),label:'',color:col,icon:'etoile',subs:[],sugg:[]}); open=draft.length-1; draw();
       const inp=list.querySelector(`#cn${draft.length-1}`); inp.focus(); });
     sheet.querySelector('#bSaveCats').addEventListener('click',async()=>{
       const empty=draft.findIndex(c=>!(c.label||'').trim());
       if(empty>=0){ draft[empty]._warn='Donnez un nom à cette rubrique.'; draw(); list.querySelector(`#cn${empty}`).focus(); return; }
-      cats=draft.map(c=>({id:c.id,label:c.label.trim(),color:c.color,icon:c.icon,sugg:c.sugg||[]}));
+      cats=draft.map(c=>({id:c.id,label:c.label.trim(),color:c.color,icon:c.icon,subs:subsOf(c),sugg:c.sugg||[]}));
       await persistCats(); closeSheet(); toast('Rubriques enregistrées');
     });
   });
@@ -862,7 +1020,12 @@ function toast(msg){ let t=document.querySelector('.toast'); if(!t){ t=document.
 const pcEl=document.getElementById('personChips'), ccEl=document.getElementById('catChips');
 dragScroll(pcEl); dragScroll(ccEl);
 pcEl.addEventListener('click',e=>{ const b=e.target.closest('[data-person]'); if(!b) return; filters.person=b.dataset.person; saveUI(); render(); revealPressed(pcEl); });
-ccEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cat]'); if(!b) return; filters.cat=b.dataset.cat; saveUI(); render(); revealPressed(ccEl); });
+ccEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cat]'); if(!b) return;
+  const v=b.dataset.cat; filters.cat = (v===filters.cat && v!=='all') ? 'all' : v; filters.sub=null; saveUI(); render(); revealPressed(ccEl); });
+document.getElementById('content').addEventListener('click',e=>{
+  const f=e.target.closest('[data-sub]'); if(f){ filters.sub=f.dataset.sub; render(); window.scrollTo({top:document.querySelector('.tools').offsetTop-8,behavior:'smooth'}); return; }
+  const a=e.target.closest('[data-add]'); if(a){ openCard(null,{memberId:a.dataset.add, cat:filters.cat, sub:filters.sub==='_none'?'':filters.sub}); }
+});
 const q=document.getElementById('q'), qc=document.getElementById('qClear');
 q.addEventListener('input',()=>{ filters.q=q.value; qc.hidden=!q.value; render(); });
 qc.addEventListener('click',()=>{ q.value=''; filters.q=''; qc.hidden=true; render(); q.focus(); });
@@ -870,7 +1033,8 @@ document.addEventListener('click',e=>{
   const o=e.target.closest('[data-open]'); if(o && !layer.contains(o)){ openCard(o.dataset.open); return; }
   const a=e.target.closest('[data-act]'); if(!a) return;
   ({new:()=>openCard(),examples:loadExamples,reset:()=>{filters={person:'all',cat:'all',q:''};q.value='';qc.hidden=true;saveUI();render();},
-    clearExamples, notif:openNotif, members:openMembers, cats:openCats})[a.dataset.act]?.();
+    clearExamples, notif:openNotif, members:openMembers, cats:openCats,
+    newSub, renameSub, deleteSub, back:()=>{ filters.sub=null; render(); }, cancelDel:()=>{ render(); }})[a.dataset.act]?.();
 });
 document.getElementById('fab').addEventListener('click',()=>openCard());
 document.getElementById('btnNotif').addEventListener('click',openNotif);
