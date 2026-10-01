@@ -164,6 +164,22 @@ button{cursor:pointer}
 .addline{display:flex;align-items:center;justify-content:center;gap:7px;min-height:46px;border-radius:14px;border:1.5px dashed var(--line-2);background:rgba(255,255,255,.025);color:var(--ink-2);font-weight:600;font-size:.92rem}
 .addline svg{width:16px;height:16px;color:var(--green-hi)}
 .warnbox{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:var(--late-bg);border:1px solid rgba(255,123,102,.3);color:var(--ink);font-size:.92rem;display:grid;gap:10px}
+.rowbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.addline.hist svg{color:var(--brass-hi)}
+.addline b{font-family:var(--f-mono);font-size:.8rem;background:rgba(255,255,255,.08);border-radius:6px;padding:1px 6px;color:var(--ink)}
+.histsum{margin:0 4px;font-size:.82rem;color:var(--ink-3)}
+.histbtn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 13px;font-weight:600;font-size:.86rem;color:var(--ink-2)}
+.histbtn svg{width:16px;height:16px;color:var(--brass-hi)}
+.fhead+.fwho{margin:-4px 2px 10px}
+.hlist{display:grid;gap:6px}
+.hrow{display:flex;align-items:center;gap:10px;padding:9px 6px 9px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.hd{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hn{flex:1;min-width:0;color:var(--ink-2);font-size:.88rem;overflow-wrap:anywhere}
+.hdel{border:0;background:none;color:var(--ink-3);min-width:34px;height:32px;border-radius:9px;font-size:1.15rem;padding:0 8px}
+.hdel.armed{background:var(--late-bg);color:var(--late);font-size:.8rem;font-weight:700}
+.histadd{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.histadd .btn{grid-column:1/-1;min-height:46px}
+@media (max-width:400px){.histadd{grid-template-columns:1fr}}
 .subpick{display:flex;flex-wrap:wrap;gap:7px}
 .subpick button{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 12px;border-radius:12px;font-weight:600;font-size:.9rem;color:var(--ink-2);background:rgba(255,255,255,.04);border:1px solid var(--line-2)}
 .subpick button svg{width:15px;height:15px;opacity:.8}
@@ -341,6 +357,7 @@ const icon = c => ICONS[c.icon] || ICONS.etoile;
 const FOLDER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/></svg>';
 const PEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></svg>';
 const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/></svg>';
+const CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4M12 7.5V12l3 2"/></svg>';
 const BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
 /* Sous-dossiers : communs à tous les membres de la famille */
 const subsOf = k => Array.isArray(k.subs) ? k.subs : ((DEFAULT_CATS.find(d=>d.id===k.id)||{}).subs || []).map(x=>Object.assign({},x));
@@ -370,7 +387,7 @@ const DEFAULT_MEMBERS = [
 const FAMILY = 'famille';
 const REMIND_OPTS = [
   [null,'Pas de rappel'],[0,'Le jour même'],[1,'La veille'],[3,'3 jours avant'],
-  [7,'1 semaine avant'],[14,'2 semaines avant'],[30,'1 mois avant'],[60,'2 mois avant'],[90,'3 mois avant']
+  [7,'1 semaine avant'],[14,'2 semaines avant'],[30,'1 mois avant'],[60,'2 mois avant'],[90,'3 mois avant'],[120,'4 mois avant'],[180,'6 mois avant'],[270,'9 mois avant'],[365,'1 an avant']
 ];
 const FAM_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>';
 
@@ -391,7 +408,7 @@ function relLabel(n){
   if(n===1) return 'demain';
   if(n===-1) return 'hier';
   const a=Math.abs(n); let t;
-  if(a<32) t=a+' jours'; else if(a<60) t=Math.round(a/7)+' semaines'; else if(a<730) t=Math.round(a/30.4)+' mois'; else t=Math.round(a/365)+' ans';
+  if(a>=360 && a<=370) t='1 an'; else if(a<32) t=a+' jours'; else if(a<60) t=Math.round(a/7)+' semaines'; else if(a<730) t=Math.round(a/30.4)+' mois'; else t=Math.round(a/365)+' ans';
   return n>0 ? 'dans '+t : 'il y a '+t;
 }
 const hasRemind = c => !(c.remindDays===null||c.remindDays===undefined||c.remindDays==='');
@@ -407,6 +424,7 @@ function status(card, today){
 let members = DEFAULT_MEMBERS.slice();
 let membersSaved = false;
 let cards = {};
+let hist = {};            // id -> {id, memberId, cat, sub, date, note} : rendez-vous passés
 let filters = {person:'all', cat:'all', q:'', sub:null};
 let mode = 'loading';     // loading | cloud (aperçu Claude) | local (app installée)
 let col = null;
@@ -428,13 +446,31 @@ const catVars = id => { const c=esc(cat(id).color); return `--c:${c};--cbg:color
 /* ---------- Stockage ---------- */
 const queues = {};
 function queued(key, fn){ const p=(queues[key]||Promise.resolve()).then(fn, fn); queues[key]=p.catch(()=>{}); return p; }
-function localLoad(){ const raw=lsGet(LS_KEY,null); if(raw){ if(raw.members&&raw.members.length){members=raw.members;membersSaved=true;} if(raw.cats&&raw.cats.length){cats=raw.cats;catsSaved=true;} cards=raw.cards||{}; } }
-function localSave(){ if(!lsSet(LS_KEY,{members,cats,cards})) toast("Impossible d'enregistrer sur ce téléphone."); }
+function localLoad(){ const raw=lsGet(LS_KEY,null); if(raw){ if(raw.members&&raw.members.length){members=raw.members;membersSaved=true;} if(raw.cats&&raw.cats.length){cats=raw.cats;catsSaved=true;} cards=raw.cards||{}; hist=raw.hist||{}; } }
+function localSave(){ if(!lsSet(LS_KEY,{members,cats,cards,hist})) toast("Impossible d'enregistrer sur ce téléphone."); }
 
 async function persistCard(card){
   cards[card.id]=card; render(); schedulePushSync();
   if(mode==='cloud'){ await ensureMembers(); return queued(card.id,()=>col.doc(card.id).set(Object.assign({kind:'fiche'},card))).catch(()=>toast("L'enregistrement a échoué. Réessayez.")); }
   localSave();
+}
+/* Historique : une liste de dates passées par personne + rubrique + sous-dossier */
+const histKey = (m,c,sb) => m+'|'+c+'|'+(sb||'');
+function histFor(m,c,sb){ const k=histKey(m,c,sb); return Object.values(hist).filter(h=>histKey(h.memberId,h.cat,h.sub)===k).sort((a,b)=>b.date.localeCompare(a.date)); }
+function lastOf(c){ const h=histFor(c.memberId,c.cat,subOf(c)?.id); return [c.lastDate,h[0]&&h[0].date].filter(Boolean).sort().pop()||''; }
+async function persistHist(e){
+  hist[e.id]=e; render();
+  if(mode==='cloud') return queued(e.id,()=>col.doc(e.id).set(Object.assign({kind:'hist'},e))).catch(()=>toast("L'enregistrement a échoué."));
+  localSave();
+}
+async function removeHist(id){
+  delete hist[id]; render();
+  if(mode==='cloud') return queued(id,()=>col.doc(id).delete()).catch(()=>toast('La suppression a échoué.'));
+  localSave();
+}
+async function ensureHist(m,c,sb,date){
+  if(!date || date>todayISO() || histFor(m,c,sb).some(h=>h.date===date)) return;
+  await persistHist({id:'h'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),memberId:m,cat:c,sub:sb||'',date,note:''});
 }
 async function removeCard(id){
   delete cards[id]; render(); schedulePushSync();
@@ -465,12 +501,13 @@ async function initStore(){
     col = db.collection('data/users/'+id);
     mode='cloud'; setSync();
     col.onSnapshot(snap=>{
-      const next={}; let mem=null;
+      const next={}, nextH={}; let mem=null;
       snap.docs.forEach(d=>{ const v=d.data(); if(!v) return;
         if(d.id==='_membres') mem=v.list;
         else if(d.id==='_rubriques'){ if(v.list && v.list.length){ cats=v.list; catsSaved=true; } }
-        else if(v.kind==='fiche'){ const c=Object.assign({},v); delete c.kind; c.id=d.id; next[d.id]=c; } });
-      cards=next; if(mem && mem.length){ members=mem; membersSaved=true; }
+        else if(v.kind==='fiche'){ const c=Object.assign({},v); delete c.kind; c.id=d.id; next[d.id]=c; }
+        else if(v.kind==='hist'){ const h=Object.assign({},v); delete h.kind; h.id=d.id; nextH[d.id]=h; } });
+      cards=next; hist=nextH; if(mem && mem.length){ members=mem; membersSaved=true; }
       render();
     }, ()=>{ mode='local'; localLoad(); setSync("Connexion perdue — affichage sur cet appareil"); render(); });
   } else {
@@ -543,7 +580,7 @@ function cardHTML(c, today){
       <span class="pill">${icon(k)}${esc(k.label)}${sb?` <span class="subtag">› ${esc(sb.label)}</span>`:''}${c.example?' <span class="ex">Exemple</span>':''}</span>
       <span class="subj">${esc(c.subject||'Sans titre')}</span>
       <span class="who">${avatar(m)}${esc(m.name)}</span>
-      ${c.lastDate?`<span class="meta">Dernière fois : ${fmt(c.lastDate)}</span>`:''}
+      ${(()=>{ const ld=lastOf(c), n=histFor(c.memberId,c.cat,subOf(c)?.id).length; return ld?`<span class="meta">Dernière fois : ${fmt(ld)}${n>1?` · ${n} rendez-vous dans l'historique`:''}</span>`:''; })()}
       ${c.note?`<span class="note">${esc(c.note)}</span>`:''}
     </div>${box}${rel}</button>`;
 }
@@ -602,7 +639,8 @@ function foldersHTML(k, today){
   tiles.push(`<button class="folder add" data-act="newSub"><span class="ficon">${PLUS}</span><span class="fname">Nouveau sous-dossier</span><span class="fmeta">Pour toute la famille</span></button>`);
   const who = filters.person==='all' ? 'Toute la famille' : member(filters.person).name;
   return `<section class="folders-wrap" style="${catVars(k.id)}">
-    <div class="fhead"><span class="ftitle">${icon(k)}${esc(k.label)}</span><span class="fwho">${esc(who)}</span></div>
+    <div class="fhead"><span class="ftitle">${icon(k)}${esc(k.label)}</span><button class="histbtn glass" data-act="history">${CLOCK}Historique</button></div>
+    <p class="fwho">${esc(who)}</p>
     <div class="folders">${tiles.join('')}</div></section>`;
 }
 /* Contenu d'un sous-dossier : une ligne par membre */
@@ -616,7 +654,9 @@ function subHTML(k, subId, today){
     const l=sorted(Object.values(cards).filter(c=>match(c) && c.memberId===p.id));
     return `<section class="mgroup"><h3>${avatar(p)}<span>${esc(p.name)}</span><span class="n">${l.length||''}</span></h3>
       ${l.length?`<div class="list">${l.map(c=>cardHTML(c,today)).join('')}</div>`:''}
-      <button class="addline" data-add="${esc(p.id)}">${PLUS}Ajouter${l.length?' une autre fiche':''} pour ${esc(p.name)}</button></section>`;
+      ${(()=>{ const h=histFor(p.id,k.id,sb.id==='_none'?'':sb.id); return `<div class="rowbtns"><button class="addline" data-add="${esc(p.id)}">${PLUS}${l.length?'Autre fiche':'Nouvelle fiche'}</button>
+        <button class="addline hist" data-hist="${esc(p.id)}">${CLOCK}Historique${h.length?` <b>${h.length}</b>`:''}</button></div>
+        ${h.length?`<p class="histsum">Dernier rendez-vous : ${fmt(h[0].date)}</p>`:''}`; })()}</section>`;
   }).join('');
   const tools = sb.id==='_none' ? '' : `<button class="icon-btn glass" data-act="renameSub" aria-label="Renommer le sous-dossier">${PEN}</button><button class="icon-btn glass danger-ic" data-act="deleteSub" aria-label="Supprimer le sous-dossier">${TRASH}</button>`;
   return `<section class="subview" style="${catVars(k.id)}">
@@ -670,7 +710,7 @@ function renderFoot(){
   const hasEx = Object.values(cards).some(c=>c.example);
   document.getElementById('foot').innerHTML =
     (hasEx?'<button class="link-btn" data-act="clearExamples">Supprimer les exemples</button>':'') +
-    '<button class="link-btn" data-act="notif">Notifications</button><button class="link-btn" data-act="cats">Rubriques</button><button class="link-btn" data-act="members">Membres et sauvegarde</button>';
+    '<button class="link-btn" data-act="history">Historique</button><button class="link-btn" data-act="notif">Notifications</button><button class="link-btn" data-act="cats">Rubriques</button><button class="link-btn" data-act="members">Membres et sauvegarde</button>';
 }
 function renderNotifPip(){ document.getElementById('notifPip').hidden = !(settings.pushOn && pushState().kind==='ready' && permission()==='granted'); }
 
@@ -687,6 +727,60 @@ function closeSheet(){ layer.innerHTML=''; document.body.style.overflow=''; last
 layer.addEventListener('click',e=>{ if(e.target.hasAttribute('data-scrim')) closeSheet(); if(e.target.closest('[data-close]')) closeSheet(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && layer.innerHTML) closeSheet(); });
 const head = t => `<div class="sheet-head"><h2>${t}</h2><button class="icon-btn glass" data-close aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`;
+
+/* Liste + ajout de dates passées (utilisé dans la fiche et dans la feuille Historique) */
+function mountHist(el, getKey, onAdded){
+  el.innerHTML = `<div class="hlist"></div>
+    <div class="histadd"><label class="sr">Date du rendez-vous passé</label><input type="date" class="hDate" max="${todayISO()}">
+      <label class="sr">Note</label><input class="hNote" maxlength="120" placeholder="Note (facultatif)">
+      <button type="button" class="btn glass-green hAdd">${PLUS}Ajouter cette date</button></div>`;
+  const draw=()=>{ const {m,c,sb}=getKey(); const l=histFor(m,c,sb);
+    el.querySelector('.hlist').innerHTML = l.length ? l.map(h=>`<div class="hrow"><span class="hd">${fmt(h.date)}</span><span class="hn">${esc(h.note)}</span><button type="button" class="hdel" data-hdel="${esc(h.id)}" aria-label="Supprimer cette date">×</button></div>`).join('')
+      : '<p class="hint" style="margin:0">Aucune date passée pour l\'instant.</p>'; };
+  el.addEventListener('click', async e=>{
+    const d=e.target.closest('[data-hdel]');
+    if(d){ if(!d.classList.contains('armed')){ d.classList.add('armed'); d.textContent='Supprimer'; return; } await removeHist(d.dataset.hdel); draw(); return; }
+    if(e.target.closest('.hAdd')){
+      const di=el.querySelector('.hDate'), ni=el.querySelector('.hNote'), v=di.value;
+      if(!v){ di.focus(); toast('Choisissez une date'); return; }
+      if(v>todayISO()){ toast('Date dans le futur : utilisez « Prochaine échéance »'); return; }
+      const {m,c,sb}=getKey();
+      if(histFor(m,c,sb).some(h=>h.date===v)){ toast('Cette date est déjà dans l\'historique'); return; }
+      await persistHist({id:'h'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),memberId:m,cat:c,sub:sb||'',date:v,note:ni.value.trim()});
+      di.value=''; ni.value=''; draw(); onAdded && onAdded(v); toast('Date ajoutée à l\'historique');
+    }
+  });
+  draw(); return draw;
+}
+function openHistory(preset){
+  const f=Object.assign({memberId: filters.person!=='all'?filters.person:(members[0]?members[0].id:FAMILY), cat: filters.cat!=='all'?filters.cat:cats[0].id, sub:(filters.sub&&filters.sub!=='_none')?filters.sub:''}, preset||{});
+  openSheet(`${head('Historique')}
+  <div class="sheet-body">
+    <p style="margin:0;color:var(--ink-2)">Renseignez les anciens rendez-vous, dans n'importe quel ordre : ils sont triés automatiquement. La date la plus récente devient la « dernière fois » des fiches.</p>
+    <div class="field"><span class="lab">Personne</span><div class="pick" id="hPerson"></div></div>
+    <div class="field"><span class="lab">Rubrique</span><div class="subpick" id="hCat"></div></div>
+    <div class="field"><span class="lab">Sous-dossier</span><div class="subpick" id="hSub"></div></div>
+    <div class="field"><span class="lab" id="hTitle">Dates passées</span><div id="hBox"></div></div>
+  </div>
+  <div class="sheet-foot"><button class="btn glass-green" data-close type="button">Terminé</button></div>`, sheet=>{
+    const $=q=>sheet.querySelector(q);
+    let redraw;
+    const drawPickers=()=>{
+      $('#hPerson').innerHTML=members.concat([{id:FAMILY}]).map(m=>{ const mm=member(m.id); return `<button type="button" class="glass" data-v="${esc(mm.id)}" aria-pressed="${f.memberId===mm.id}">${avatar(mm)}${esc(mm.name)}</button>`; }).join('');
+      $('#hCat').innerHTML=cats.map(c=>`<button type="button" style="${catVars(c.id)}" data-v="${esc(c.id)}" aria-pressed="${f.cat===c.id}">${icon(c)}${esc(c.label)}</button>`).join('');
+      $('#hSub').setAttribute('style',catVars(f.cat));
+      $('#hSub').innerHTML=`<button type="button" data-v="" aria-pressed="${!f.sub}">Aucun</button>`+subsOf(cat(f.cat)).map(x=>`<button type="button" data-v="${esc(x.id)}" aria-pressed="${f.sub===x.id}">${FOLDER}${esc(x.label)}</button>`).join('');
+      const sb=subsOf(cat(f.cat)).find(x=>x.id===f.sub);
+      $('#hTitle').textContent=`Dates passées · ${member(f.memberId).name} · ${sb?sb.label:cat(f.cat).label}`;
+      redraw && redraw();
+    };
+    $('#hPerson').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.memberId=b.dataset.v; drawPickers(); });
+    $('#hCat').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(f.cat!==b.dataset.v){ f.cat=b.dataset.v; f.sub=''; } drawPickers(); });
+    $('#hSub').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.sub=b.dataset.v; drawPickers(); });
+    redraw=mountHist($('#hBox'),()=>({m:f.memberId,c:f.cat,sb:f.sub}));
+    drawPickers();
+  });
+}
 
 /* Formulaire fiche */
 function openCard(id, preset){
@@ -705,6 +799,7 @@ function openCard(id, preset){
       <div class="field"><label for="fLast">Dernière date</label><input id="fLast" type="date" value="${esc(f.lastDate)}"><span class="hint">Facultatif</span></div>
       <div class="field"><label for="fNext">Prochaine échéance</label><input id="fNext" type="date" value="${esc(f.nextDate)}"><span class="hint">Date recommandée ou limite</span></div>
     </div>
+    <div class="field"><span class="lab">Historique des rendez-vous</span><div id="fHist"></div></div>
     <div class="field" id="quickNext"><span class="hint">Calculer depuis la dernière date :</span>
       <div class="sugg"><button type="button" data-plus="6">+ 6 mois</button><button type="button" data-plus="12">+ 1 an</button><button type="button" data-plus="24">+ 2 ans</button><button type="button" data-plus="36">+ 3 ans</button></div></div>
     <div class="field"><label for="fRemind">Rappel</label><select id="fRemind">${remindSel}</select><span class="hint" id="remindHint"></span></div>
@@ -724,12 +819,15 @@ function openCard(id, preset){
       if(r===''){ h.textContent='Aucune notification pour cette fiche.'; return; }
       const when = n ? (Number(r)>0 ? `le ${longDate(addDays(n,-Number(r)))} puis le jour J` : `le ${longDate(n)}`) : 'dès que la prochaine échéance sera indiquée';
       h.textContent = `Notification à ${settings.hour} h ${when}. La fiche remonte aussi dans « À ne pas oublier ».`; };
-    drawPerson(); drawCat(); drawHint();
-    pP.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.memberId=b.dataset.v; drawPerson(); });
-    pC.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(f.cat!==b.dataset.v){ f.cat=b.dataset.v; f.sub=''; } drawCat(); });
+    const key=()=>({m:f.memberId,c:f.cat,sb:f.sub});
+    const fillLast=()=>{ const h=histFor(f.memberId,f.cat,f.sub); if(h.length && (!$('#fLast').value || h[0].date>$('#fLast').value)) $('#fLast').value=h[0].date; };
+    const redrawHist=mountHist($('#fHist'), key, ()=>fillLast());
+    drawPerson(); drawCat(); drawHint(); fillLast();
+    pP.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; f.memberId=b.dataset.v; drawPerson(); redrawHist(); if(isNew) fillLast(); });
+    pC.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(f.cat!==b.dataset.v){ f.cat=b.dataset.v; f.sub=''; } drawCat(); redrawHist(); });
     pS.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
       if(b.dataset.new){ const row=$('#newSubRow'); row.hidden=!row.hidden; if(!row.hidden) $('#fNewSub').focus(); return; }
-      f.sub=b.dataset.v; drawSub(); });
+      f.sub=b.dataset.v; drawSub(); redrawHist(); if(isNew) fillLast(); });
     const createSub=async()=>{ const v=$('#fNewSub').value.trim(); if(!v){ $('#fNewSub').focus(); return; }
       const sb=await addSub(f.cat,v); if(sb){ f.sub=sb.id; $('#fNewSub').value=''; $('#newSubRow').hidden=true; drawSub(); toast('Sous-dossier « '+sb.label+' » créé pour toute la famille'); } };
     $('#bNewSubOk').addEventListener('click',createSub);
@@ -750,6 +848,7 @@ function openCard(id, preset){
       const r=$('#fRemind').value;
       const out={id:f.id,memberId:f.memberId,cat:f.cat,sub:sbObj?sbObj.id:'',subject,lastDate:$('#fLast').value||'',nextDate:$('#fNext').value||'',note:$('#fNote').value.trim(),remindDays:r===''?null:Number(r),updatedAt:new Date().toISOString()};
       if(f.example) out.example=true;
+      ensureHist(out.memberId,out.cat,out.sub,out.lastDate);
       persistCard(out); closeSheet(); toast(isNew?'Fiche ajoutée':'Fiche enregistrée');
     });
   });
@@ -954,7 +1053,7 @@ function openCats(){
 
 async function exportData(){
   const name='carnet-famille-'+todayISO()+'.json';
-  const data=JSON.stringify({app:'carnet-famille',version:1,exportedAt:new Date().toISOString(),members,cats,cards:Object.values(cards)},null,2);
+  const data=JSON.stringify({app:'carnet-famille',version:1,exportedAt:new Date().toISOString(),members,cats,cards:Object.values(cards),hist:Object.values(hist)},null,2);
   let dl=null; try{ dl = window.claude ? await window.claude.use('downloads') : null; }catch(e){}
   if(dl){ try{ await dl.save({filename:name,data}); toast('Copie exportée'); }catch(e){ if(e && e.code!=='declined') toast("L'export a échoué."); } return; }
   try{
@@ -972,6 +1071,7 @@ document.getElementById('importFile').addEventListener('change',async e=>{
     if(Array.isArray(raw.members) && raw.members.length){ members=raw.members; await persistMembers(); }
     if(Array.isArray(raw.cats) && raw.cats.length){ cats=raw.cats; await persistCats(); }
     for(const c of raw.cards){ if(c && c.id && c.subject) await persistCard(c); }
+    if(Array.isArray(raw.hist)) for(const h of raw.hist){ if(h && h.id && h.date) await persistHist(h); }
     closeSheet(); toast(raw.cards.length+' fiche(s) importée(s)');
   }catch(err){ toast("Ce fichier n'est pas une copie du Carnet de famille."); }
 });
@@ -1006,6 +1106,7 @@ ccEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cat]'); if(!b
   const v=b.dataset.cat; filters.cat = (v===filters.cat && v!=='all') ? 'all' : v; filters.sub=null; saveUI(); render(); revealPressed(ccEl); });
 document.getElementById('content').addEventListener('click',e=>{
   const f=e.target.closest('[data-sub]'); if(f){ filters.sub=f.dataset.sub; render(); window.scrollTo({top:document.querySelector('.tools').offsetTop-8,behavior:'smooth'}); return; }
+  const hb=e.target.closest('[data-hist]'); if(hb){ openHistory({memberId:hb.dataset.hist, cat:filters.cat, sub:filters.sub==='_none'?'':filters.sub}); return; }
   const a=e.target.closest('[data-add]'); if(a){ openCard(null,{memberId:a.dataset.add, cat:filters.cat, sub:filters.sub==='_none'?'':filters.sub}); }
 });
 const q=document.getElementById('q'), qc=document.getElementById('qClear');
@@ -1016,7 +1117,7 @@ document.addEventListener('click',e=>{
   const a=e.target.closest('[data-act]'); if(!a) return;
   ({new:()=>openCard(),examples:loadExamples,reset:()=>{filters={person:'all',cat:'all',q:''};q.value='';qc.hidden=true;saveUI();render();},
     clearExamples, notif:openNotif, members:openMembers, cats:openCats,
-    newSub, renameSub, deleteSub, back:()=>{ filters.sub=null; render(); }, cancelDel:()=>{ render(); }})[a.dataset.act]?.();
+    newSub, renameSub, deleteSub, history:()=>openHistory(), back:()=>{ filters.sub=null; render(); }, cancelDel:()=>{ render(); }})[a.dataset.act]?.();
 });
 document.getElementById('fab').addEventListener('click',()=>openCard());
 document.getElementById('btnNotif').addEventListener('click',openNotif);

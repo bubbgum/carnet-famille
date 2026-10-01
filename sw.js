@@ -1,5 +1,5 @@
 /* Carnet de famille — service worker : fonctionnement hors ligne + notifications */
-const VERSION = 'carnet-v4';
+const VERSION = 'carnet-v5';
 const CORE = ['./', './index.html', './config.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
