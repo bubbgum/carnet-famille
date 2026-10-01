@@ -193,6 +193,17 @@ button{cursor:pointer}
 .hrow{display:flex;align-items:center;gap:10px;padding:9px 6px 9px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
 .hd{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .hn{flex:1;min-width:0;color:var(--ink-2);font-size:.88rem;overflow-wrap:anywhere}
+.hrow{width:100%;text-align:left;color:var(--ink)}
+button.hrow:active{transform:scale(.99)}
+.hn i{font-style:normal;color:var(--ink-3)}
+.hpen{display:grid;place-items:center;width:30px;height:30px;color:var(--ink-3);flex:none}
+.hpen svg{width:16px;height:16px}
+.hrow.editing{display:block;padding:10px;border-color:var(--line-2);background:rgba(255,255,255,.06)}
+.hedit{display:grid;gap:8px}
+.hbtns{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+.hbtns .btn{min-height:44px;padding:0 12px;font-size:.92rem}
+.hbtns .danger svg{width:18px;height:18px}
+.hbtns .danger.armed{font-size:.85rem}
 .hdel{border:0;background:none;color:var(--ink-3);min-width:34px;height:32px;border-radius:9px;font-size:1.15rem;padding:0 8px}
 .hdel.armed{background:var(--late-bg);color:var(--late);font-size:.8rem;font-weight:700}
 .histadd{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
@@ -752,12 +763,44 @@ function mountHist(el, getKey, onAdded){
     <div class="histadd"><label class="sr">Date du rendez-vous passé</label><input type="date" class="hDate" max="${todayISO()}">
       <label class="sr">Note</label><input class="hNote" maxlength="120" placeholder="Note (facultatif)">
       <button type="button" class="btn glass-green hAdd">${PLUS}Ajouter cette date</button></div>`;
+  let editing=null;   // id de la date en cours de modification
   const draw=()=>{ const {m,c,sb}=getKey(); const l=histFor(m,c,sb);
-    el.querySelector('.hlist').innerHTML = l.length ? l.map(h=>`<div class="hrow"><span class="hd">${fmt(h.date)}</span><span class="hn">${esc(h.note)}</span><button type="button" class="hdel" data-hdel="${esc(h.id)}" aria-label="Supprimer cette date">×</button></div>`).join('')
+    el.querySelector('.hlist').innerHTML = l.length ? l.map(h=> h.id===editing
+      ? `<div class="hrow editing"><div class="hedit">
+          <label class="sr" for="he-d">Date</label><input type="date" id="he-d" class="heDate" max="${todayISO()}" value="${esc(h.date)}">
+          <label class="sr" for="he-n">Note</label><input id="he-n" class="heNote" maxlength="120" placeholder="Note (facultatif)" value="${esc(h.note)}">
+          <div class="hbtns"><button type="button" class="btn glass-green" data-hsave="${esc(h.id)}">Enregistrer</button><button type="button" class="btn glass" data-hcancel="1">Annuler</button><button type="button" class="btn glass danger" data-hdel="${esc(h.id)}">${TRASH}</button></div>
+        </div></div>`
+      : `<button type="button" class="hrow" data-hedit="${esc(h.id)}" aria-label="Modifier la date du ${fmt(h.date)}"><span class="hd">${fmt(h.date)}</span><span class="hn">${h.note?esc(h.note):'<i>Ajouter une note</i>'}</span><span class="hpen">${PEN}</span></button>`).join('')
       : '<p class="hint" style="margin:0">Aucune date passée pour l\'instant.</p>'; };
+  /* Garde la « dernière date » des fiches en accord avec l'historique corrigé */
+  const syncLast=async (m,c,sb,oldDate)=>{
+    const latest=(histFor(m,c,sb)[0]||{}).date||'';
+    for(const card of Object.values(cards)){
+      if(card.memberId===m && card.cat===c && (subOf(card)?.id||'')===(sb||'') && card.lastDate===oldDate && card.lastDate!==latest)
+        await persistCard(Object.assign({},card,{lastDate:latest}));
+    }
+  };
   el.addEventListener('click', async e=>{
+    const ed=e.target.closest('[data-hedit]');
+    if(ed){ editing=ed.dataset.hedit; draw(); const i=el.querySelector('.heNote'); i && i.focus(); return; }
+    if(e.target.closest('[data-hcancel]')){ editing=null; draw(); return; }
+    const sv=e.target.closest('[data-hsave]');
+    if(sv){
+      const h=hist[sv.dataset.hsave]; if(!h){ editing=null; draw(); return; }
+      const v=el.querySelector('.heDate').value, note=el.querySelector('.heNote').value.trim();
+      if(!v){ el.querySelector('.heDate').focus(); toast('Choisissez une date'); return; }
+      if(v>todayISO()){ toast('Date dans le futur : utilisez « Prochaine échéance »'); return; }
+      if(histFor(h.memberId,h.cat,h.sub).some(x=>x.id!==h.id && x.date===v)){ toast('Cette date est déjà dans l\'historique'); return; }
+      const old=h.date;
+      await persistHist(Object.assign({},h,{date:v,note,updatedAt:new Date().toISOString()}));
+      if(old!==v) await syncLast(h.memberId,h.cat,h.sub,old);
+      editing=null; draw(); onAdded && onAdded(v); toast('Date modifiée'); return;
+    }
     const d=e.target.closest('[data-hdel]');
-    if(d){ if(!d.classList.contains('armed')){ d.classList.add('armed'); d.textContent='Supprimer'; return; } await removeHist(d.dataset.hdel); draw(); return; }
+    if(d){ if(!d.classList.contains('armed')){ d.classList.add('armed'); d.textContent='Confirmer'; return; }
+      const h=hist[d.dataset.hdel]; await removeHist(d.dataset.hdel); if(h) await syncLast(h.memberId,h.cat,h.sub,h.date);
+      editing=null; draw(); toast('Date supprimée'); return; }
     if(e.target.closest('.hAdd')){
       const di=el.querySelector('.hDate'), ni=el.querySelector('.hNote'), v=di.value;
       if(!v){ di.focus(); toast('Choisissez une date'); return; }
